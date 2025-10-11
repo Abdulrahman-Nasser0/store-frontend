@@ -3,6 +3,7 @@
 import { signUp } from "../lib/actions";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import Link from "next/link";
 
 const SignUpForm = () => {
     const [state, signUpAction] = useActionState(signUp, undefined);
@@ -85,9 +86,9 @@ const SignUpForm = () => {
                 <div className="text-center">
                     <p className="text-sm text-gray-600">
                         Already have an account?{' '}
-                        <a href="/login" className="font-medium text-blue-600 hover:text-blue-500">
+                        <Link href="/login" className="font-medium text-blue-600 hover:text-blue-500">
                             Sign in here
-                        </a>
+                        </Link>
                     </p>
                 </div>
             </form>

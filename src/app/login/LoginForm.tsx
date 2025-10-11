@@ -3,6 +3,7 @@
 import { login } from "../lib/actions";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import Link from "next/link";
 
 const LoginForm = () => {
     const [state, loginAction] = useActionState(login, undefined);
@@ -47,6 +48,15 @@ const LoginForm = () => {
                 </div>
 
                 <SubmitButton />
+
+                <div className="text-center">
+                    <p className="text-sm text-gray-600">
+                        Don&apos;t have an account?{' '}
+                        <Link href="/signup" className="font-medium text-blue-600 hover:text-blue-500">
+                            Sign up here
+                        </Link>
+                    </p>
+                </div>
             </form>
         </div>
     );
