@@ -17,6 +17,9 @@ dependencies:
   react-dom:
     specifier: 19.1.0
     version: 19.1.0(react@19.1.0)
+  zod:
+    specifier: ^4.1.12
+    version: 4.1.12
 
 devDependencies:
   '@eslint/eslintrc':
@@ -3417,3 +3420,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
     dev: true
+
+  /zod@4.1.12:
+    resolution: {integrity: sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ==}
+    dev: false

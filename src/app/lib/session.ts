@@ -6,10 +6,11 @@ const secretKey = process.env.SESSION_SECRET;
 if (!secretKey) {
   throw new Error("SESSION_SECRET environment variable is required");
 }
+
 const encodedKey = new TextEncoder().encode(secretKey);
 
 export async function createSession(userId: string) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
   const session = await encrypt({ userId, expiresAt });
 
   const cookieStore = await cookies();
@@ -50,7 +51,7 @@ export async function decrypt(session: string | undefined = "") {
       algorithms: ["HS256"],
     });
     return payload;
-  } catch (error) {
+  } catch {
     console.log("Failed to verify session");
     return null;
   }
