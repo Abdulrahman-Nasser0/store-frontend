@@ -166,10 +166,18 @@ export async function logoutApi(token: string) {
   });
 }
 
+export interface AuthStatusResponse {
+  isAuthenticated: boolean;
+  username: string | null;
+  userId: string;
+  email: string;
+  roles: string[];
+  tokenExpiry: string | null;
+}
+
 // Auth Status
 export async function authStatusApi(token: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return apiCall<any>("/api/Auth/status", {
+  return apiCall<AuthStatusResponse | null>("/api/Auth/status", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

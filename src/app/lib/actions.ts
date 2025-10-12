@@ -1,9 +1,8 @@
-// lib/actions.ts
 "use server";
 import { z } from "zod";
 import { createSession, deleteSession, getSession } from "./session";
 import { redirect } from "next/navigation";
-import { loginApi, registerApi } from "./api";
+import { loginApi, registerApi, authStatusApi } from "./api";
 
 // ==========================================
 // VALIDATION SCHEMAS
@@ -106,7 +105,7 @@ export async function login(_prevState: any, formData: FormData): Promise<LoginS
     response.data.refreshTokenExpiration
   );
   console.log(response.data)
-  
+
   // 6. Redirect to dashboard
   redirect("/dashboard");
 }
@@ -203,4 +202,36 @@ export async function logout() {
   // Delete local session
   await deleteSession();
   redirect("/login");
+}
+
+// ==========================================
+// PROFILE ACTIONS
+// ==========================================
+
+export async function getUserProfile() {
+
+  try {
+    const session = await getSession();
+    // console.log("Server session:", session); // Debug log
+
+    if (!session?.token) {
+      // console.log("No token found in session"); // Debug log
+      return {
+        isSuccess: false,
+        message: "No authentication token found",
+        data: null,
+      };
+    }
+
+    const response = await authStatusApi(session.token);
+    // console.log("Auth status API response:", response); // Debug log
+    return response;
+  } catch (error) {
+    console.error("Profile fetch error:", error);
+    return {
+      isSuccess: false,
+      message: "Failed to fetch user profile",
+      data: null,
+    };
+  }
 }
