@@ -1,20 +1,14 @@
+// lib/actions.ts
 "use server";
-
 import { z } from "zod";
-import { createSession, deleteSession } from "./session";
+import { createSession, deleteSession, getSession } from "./session";
 import { redirect } from "next/navigation";
+import { loginApi, registerApi } from "./api";
 
-// Mock users database (in real app, use a database)
-const users = [
-  {
-    id: "1",
-    name: "Test User",
-    email: "contact@cosdensolutions.io",
-    password: "12345678",
-  }
-];
+// ==========================================
+// VALIDATION SCHEMAS
+// ==========================================
 
-// LOGIN VALIDATION SCHEMA
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }).trim(),
   password: z
@@ -23,9 +17,9 @@ const loginSchema = z.object({
     .trim(),
 });
 
-// SIGNUP VALIDATION SCHEMA
 const signUpSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }).trim(),
+  userName: z.string().min(3, { message: "Username must be at least 3 characters" }).trim(),
+  fullName: z.string().min(2, { message: "Full name must be at least 2 characters" }).trim(),
   email: z.string().email({ message: "Invalid email address" }).trim(),
   password: z
     .string()
@@ -37,7 +31,10 @@ const signUpSchema = z.object({
   path: ["confirmPassword"],
 });
 
+// ==========================================
 // TYPES
+// ==========================================
+
 type LoginState = {
   errors?: {
     email?: string[];
@@ -48,7 +45,8 @@ type LoginState = {
 
 type SignUpState = {
   errors?: {
-    name?: string[];
+    userName?: string[];
+    fullName?: string[];
     email?: string[];
     password?: string[];
     confirmPassword?: string[];
@@ -56,9 +54,12 @@ type SignUpState = {
   message?: string;
 } | undefined;
 
+// ==========================================
 // LOGIN ACTION
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// ==========================================
+
 export async function login(_prevState: any, formData: FormData): Promise<LoginState> {
+  // 1. Validate form data
   const result = loginSchema.safeParse(Object.fromEntries(formData));
   
   if (!result.success) {
@@ -68,28 +69,60 @@ export async function login(_prevState: any, formData: FormData): Promise<LoginS
   }
 
   const { email, password } = result.data;
-  
-  // Authenticate User - find user in the users array
-  const user = users.find(u => u.email === email && u.password === password);
-  if (!user) {
+
+  // 2. Call backend API
+  const response = await loginApi({ email, password });
+
+  // 3. Handle API response
+  if (!response.isSuccess) {
     return {
       errors: {
-        email: ["Invalid email or password"],
-        password: ["Invalid email or password"],
+        email: response.errors || [response.message],
       },
+      message: response.message,
     };
   }
 
-  // Create Session
-  await createSession(user.id);
-  
-  // Redirect to Dashboard
+  // 4. Check if we have the required data
+  if (!response.data || !response.data.token) {
+    return {
+      errors: {
+        email: ["Invalid response from server"],
+      },
+      message: "Login failed",
+    };
+  }
+
+  // 5. Check if email is confirmed
+  if (!response.data.emailConfirmed) {
+    return {
+      errors: {
+        email: ["Please verify your email before logging in"],
+      },
+      message: "Email not verified",
+    };
+  }
+
+  // 6. Create session with user data
+  await createSession(
+    response.data.username,
+    response.data.email,
+    response.data.roles,
+    response.data.token,
+    response.data.emailConfirmed,
+    response.data.refreshTokenExpiration
+  );
+
+  // 7. Redirect to dashboard
   redirect("/dashboard");
 }
 
+// ==========================================
 // SIGNUP ACTION
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// ==========================================
+
 export async function signUp(_prevState: any, formData: FormData): Promise<SignUpState> {
+  // 1. Validate form data
   const result = signUpSchema.safeParse(Object.fromEntries(formData));
   
   if (!result.success) {
@@ -98,35 +131,77 @@ export async function signUp(_prevState: any, formData: FormData): Promise<SignU
     };
   }
 
-  const { name, email, password } = result.data;
+  const { userName, fullName, email, password, confirmPassword } = result.data;
 
-  // Check if user already exists
-  const existingUser = users.find(user => user.email === email);
-  if (existingUser) {
+  // 2. Call backend API
+  const response = await registerApi({
+    userName,
+    fullName,
+    email,
+    password,
+    confirmPassword,
+  });
+
+  // 3. Handle API response
+  if (!response.isSuccess) {
+    // Map backend errors to form fields
+    const fieldErrors: SignUpState["errors"] = {};
+    
+    if (response.errors) {
+      response.errors.forEach(error => {
+        const lowerError = error.toLowerCase();
+        if (lowerError.includes("email")) {
+          fieldErrors.email = fieldErrors.email || [];
+          fieldErrors.email.push(error);
+        } else if (lowerError.includes("password")) {
+          fieldErrors.password = fieldErrors.password || [];
+          fieldErrors.password.push(error);
+        } else if (lowerError.includes("username")) {
+          fieldErrors.userName = fieldErrors.userName || [];
+          fieldErrors.userName.push(error);
+        } else if (lowerError.includes("name")) {
+          fieldErrors.fullName = fieldErrors.fullName || [];
+          fieldErrors.fullName.push(error);
+        }
+      });
+    }
+
+    // If no field-specific errors, show general error on email field
+    if (Object.keys(fieldErrors).length === 0) {
+      fieldErrors.email = [response.message];
+    }
+
     return {
-      errors: {
-        email: ["An account with this email already exists"],
-      },
+      errors: fieldErrors,
+      message: response.message,
     };
   }
 
-  // Create new user (in real app, hash password and save to database)
-  const newUser = {
-    id: Date.now().toString(), // In real app, use proper ID generation
-    name,
-    email,
-    password, // In real app, hash this password
-  };
-  
-  users.push(newUser);
-
-  // Create session and redirect
-  await createSession(newUser.id);
-  redirect("/dashboard");
+  // 4. Registration successful - redirect to email verification page
+  redirect(`/verify-email?email=${encodeURIComponent(email)}`);
 }
 
+
+// ==========================================
 // LOGOUT ACTION
+// ==========================================
+
 export async function logout() {
+  // Get session to retrieve token
+  const session = await getSession();
+  
+  if (session?.token) {
+    // Call backend logout endpoint
+    try {
+      const { logoutApi } = await import("./api");
+      await logoutApi(session.token);
+    } catch (error) {
+      console.error("Logout API call failed:", error);
+      // Continue with local logout even if API fails
+    }
+  }
+  
+  // Delete local session
   await deleteSession();
   redirect("/login");
 }

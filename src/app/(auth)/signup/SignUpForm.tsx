@@ -12,21 +12,41 @@ const SignUpForm = () => {
         <div className="bg-white py-8 px-6 shadow-xl rounded-lg border border-gray-200">
             <form action={signUpAction} className="space-y-6">
                 <div>
-                    <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label htmlFor="userName" className="block text-sm font-semibold text-gray-700 mb-2">
+                        Username
+                    </label>
+                    <input 
+                        type="text" 
+                        name="userName"
+                        id="userName"
+                        placeholder="Choose a username" 
+                        className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                        required
+                    />
+                    {state?.errors?.userName && (
+                        <p className="text-red-500 text-sm mt-2 flex items-center">
+                            <span className="mr-1">⚠️</span>
+                            {state.errors.userName[0]}
+                        </p>
+                    )}
+                </div>
+
+                <div>
+                    <label htmlFor="fullName" className="block text-sm font-semibold text-gray-700 mb-2">
                         Full Name
                     </label>
                     <input 
                         type="text" 
-                        name="name"
-                        id="name"
+                        name="fullName"
+                        id="fullName"
                         placeholder="Enter your full name" 
                         className="w-full text-black px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                         required
                     />
-                    {state?.errors?.name && (
+                    {state?.errors?.fullName && (
                         <p className="text-red-500 text-sm mt-2 flex items-center">
                             <span className="mr-1">⚠️</span>
-                            {state.errors.name[0]}
+                            {state.errors.fullName[0]}
                         </p>
                     )}
                 </div>
@@ -65,6 +85,7 @@ const SignUpForm = () => {
                     />
                     {state?.errors?.password && (
                         <p className="text-red-500 text-sm mt-2 flex items-center">
+                            <span className="mr-1">⚠️</span>
                             {state.errors.password[0]}
                         </p>
                     )}
@@ -84,6 +105,7 @@ const SignUpForm = () => {
                     />
                     {state?.errors?.confirmPassword && (
                         <p className="text-red-500 text-sm mt-2 flex items-center">
+                            <span className="mr-1">⚠️</span>
                             {state.errors.confirmPassword[0]}
                         </p>
                     )}

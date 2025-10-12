@@ -1,4 +1,3 @@
-// lib/session.ts
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
@@ -52,7 +51,7 @@ export async function getSession(): Promise<SessionPayload | null> {
   return await decrypt(session);
 }
 
-async function encrypt(payload: SessionPayload) {
+export async function encrypt(payload: SessionPayload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -60,7 +59,7 @@ async function encrypt(payload: SessionPayload) {
     .sign(encodedKey);
 }
 
-async function decrypt(session: string | undefined = ""): Promise<SessionPayload | null> {
+export async function decrypt(session: string | undefined = ""): Promise<SessionPayload | null> {
   try {
     if (!session || session.trim() === "") {
       return null;
