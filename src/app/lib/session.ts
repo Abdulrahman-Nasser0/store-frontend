@@ -9,18 +9,21 @@ if (!secretKey) {
 
 const encodedKey = new TextEncoder().encode(secretKey);
 
-// Updated session payload to include user info
+
 type SessionPayload = {
-  userId: string;
-  email: string;
-  name: string;
-  token: string; // Backend JWT token
-  expiresAt: Date;
+  userId: string;        // from username
+  email: string;         // from email
+  name: string;          // display name 
+  roles: string[];       // user roles array
+  token: string;         // JWT token
+  emailConfirmed: boolean;     // email verification status
+  refreshTokenExpiration: string; // refresh token expiry
+  expiresAt: Date;       // session expiry
 };
 
-export async function createSession(userId: string, email: string, name: string, token: string) {
+export async function createSession(userId: string, email: string, name: string, token: string, roles: string[], emailConfirmed: boolean, refreshTokenExpiration: string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-  const session = await encrypt({ userId, email, name, token, expiresAt });
+  const session = await encrypt({ userId, email, name, token, expiresAt, roles, emailConfirmed, refreshTokenExpiration });
 
   const cookieStore = await cookies();
   cookieStore.set("session", session, {

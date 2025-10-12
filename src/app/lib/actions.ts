@@ -57,7 +57,7 @@ type SignUpState = {
 // ==========================================
 // LOGIN ACTION
 // ==========================================
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function login(_prevState: any, formData: FormData): Promise<LoginState> {
   // 1. Validate form data
   const result = loginSchema.safeParse(Object.fromEntries(formData));
@@ -93,34 +93,28 @@ export async function login(_prevState: any, formData: FormData): Promise<LoginS
     };
   }
 
-  // 5. Check if email is confirmed
-  if (!response.data.emailConfirmed) {
-    return {
-      errors: {
-        email: ["Please verify your email before logging in"],
-      },
-      message: "Email not verified",
-    };
-  }
+  
 
-  // 6. Create session with user data
+  // 5. Create session with user data
   await createSession(
     response.data.username,
     response.data.email,
-    response.data.roles,
+    response.data.username, // or response.data.fullName if you add it to API
     response.data.token,
+    response.data.roles,
     response.data.emailConfirmed,
     response.data.refreshTokenExpiration
   );
-
-  // 7. Redirect to dashboard
+  console.log(response.data)
+  
+  // 6. Redirect to dashboard
   redirect("/dashboard");
 }
 
 // ==========================================
 // SIGNUP ACTION
 // ==========================================
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function signUp(_prevState: any, formData: FormData): Promise<SignUpState> {
   // 1. Validate form data
   const result = signUpSchema.safeParse(Object.fromEntries(formData));
@@ -145,7 +139,13 @@ export async function signUp(_prevState: any, formData: FormData): Promise<SignU
   // 3. Handle API response
   if (!response.isSuccess) {
     // Map backend errors to form fields
-    const fieldErrors: SignUpState["errors"] = {};
+    const fieldErrors: {
+      userName?: string[];
+      fullName?: string[];
+      email?: string[];
+      password?: string[];
+      confirmPassword?: string[];
+    } = {};
     
     if (response.errors) {
       response.errors.forEach(error => {
@@ -185,7 +185,6 @@ export async function signUp(_prevState: any, formData: FormData): Promise<SignU
 // ==========================================
 // LOGOUT ACTION
 // ==========================================
-
 export async function logout() {
   // Get session to retrieve token
   const session = await getSession();

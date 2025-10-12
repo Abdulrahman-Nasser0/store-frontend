@@ -21,7 +21,7 @@ export default function VerifyEmail() {
     setMessage('');
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Auth/ConfirmEmail`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Auth/confirm-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code }),
@@ -50,7 +50,7 @@ export default function VerifyEmail() {
     setMessage('');
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Auth/ResendVerificationCode`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Auth/resend-verification-code`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, verificationType: 0 }), // 0 for email verification

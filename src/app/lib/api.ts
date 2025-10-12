@@ -2,6 +2,7 @@
 "use server";
 
 // Import types from your types file
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ApiResponse<T = any> {
   isSuccess: boolean;
   message: string;
@@ -167,6 +168,7 @@ export async function logoutApi(token: string) {
 
 // Auth Status
 export async function authStatusApi(token: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return apiCall<any>("/api/Auth/status", {
     method: "GET",
     headers: {
