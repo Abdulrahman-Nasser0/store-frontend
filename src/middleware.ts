@@ -14,13 +14,23 @@ export default async function middleware(req: NextRequest) {
   const cookie = cookieStore.get("session")?.value;
   const session = await decrypt(cookie);
 
-  // Redirect unauthenticated users
+  // Development logging
+  if (process.env.NODE_ENV === "development") {
+    console.log(`🛡️ Middleware: ${req.method} ${path}`, {
+      isProtected: isProtectedRoute,
+      isPublic: isPublicRoute,
+      hasSession: !!session?.userId,
+      userId: session?.userId || "anonymous"
+    });
+  }
+
+  // Redirect unauthenticated users from protected routes
   if (isProtectedRoute && !session?.userId) {
     return NextResponse.redirect(new URL("/login", req.nextUrl));
   }
 
-  // No login page for logged in users
-  if (isPublicRoute && session?.userId) {
+  // Redirect authenticated users from auth pages
+  if (isPublicRoute && session?.userId && (path === "/login" || path === "/signup")) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 

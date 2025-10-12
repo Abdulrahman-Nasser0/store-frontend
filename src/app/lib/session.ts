@@ -16,14 +16,23 @@ export async function createSession(userId: string) {
   const cookieStore = await cookies();
   cookieStore.set("session", session, {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
     expires: expiresAt,
+    sameSite: "lax",
   });
+
+  if (process.env.NODE_ENV === "development") {
+    console.log("🔐 Session created for user:", userId, "expires:", expiresAt.toISOString());
+  }
 }
 
 export async function deleteSession() {
   const cookieStore = await cookies();
   cookieStore.delete("session");
+
+  if (process.env.NODE_ENV === "development") {
+    console.log("🔓 Session deleted successfully");
+  }
 }
 
 export async function getSession() {
@@ -47,12 +56,31 @@ export async function encrypt(payload: SessionPayload) {
 
 export async function decrypt(session: string | undefined = "") {
   try {
+    if (!session || session.trim() === "") {
+      // No session token provided - user is not authenticated
+      return null;
+    }
+
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ["HS256"],
     });
+    
+    // Optional: Log successful session verification in development only
+    if (process.env.NODE_ENV === "development") {
+      console.log("✅ Session verified successfully for user:", payload.userId);
+    }
+    
     return payload;
-  } catch {
-    console.log("Failed to verify session");
+  } catch (error) {
+    // Only log actual errors, not missing sessions
+    if (session && session.trim() !== "") {
+      console.warn("⚠️ Session verification failed:", {
+        hasSession: !!session,
+        sessionLength: session?.length || 0,
+        error: error instanceof Error ? error.message : "Unknown error",
+        timestamp: new Date().toISOString()
+      });
+    }
     return null;
   }
 }
