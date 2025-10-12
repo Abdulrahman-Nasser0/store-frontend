@@ -1,3 +1,4 @@
+// lib/session.ts
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
@@ -9,9 +10,18 @@ if (!secretKey) {
 
 const encodedKey = new TextEncoder().encode(secretKey);
 
-export async function createSession(userId: string) {
+// Updated session payload to include user info
+type SessionPayload = {
+  userId: string;
+  email: string;
+  name: string;
+  token: string; // Backend JWT token
+  expiresAt: Date;
+};
+
+export async function createSession(userId: string, email: string, name: string, token: string) {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
-  const session = await encrypt({ userId, expiresAt });
+  const session = await encrypt({ userId, email, name, token, expiresAt });
 
   const cookieStore = await cookies();
   cookieStore.set("session", session, {
@@ -19,10 +29,11 @@ export async function createSession(userId: string) {
     secure: process.env.NODE_ENV === "production",
     expires: expiresAt,
     sameSite: "lax",
+    path: "/",
   });
 
   if (process.env.NODE_ENV === "development") {
-    console.log("🔐 Session created for user:", userId, "expires:", expiresAt.toISOString());
+    console.log("🔐 Session created for user:", email, "expires:", expiresAt.toISOString());
   }
 }
 
@@ -35,18 +46,13 @@ export async function deleteSession() {
   }
 }
 
-export async function getSession() {
+export async function getSession(): Promise<SessionPayload | null> {
   const cookieStore = await cookies();
   const session = cookieStore.get("session")?.value;
   return await decrypt(session);
 }
 
-type SessionPayload = {
-  userId: string;
-  expiresAt: Date;
-};
-
-export async function encrypt(payload: SessionPayload) {
+async function encrypt(payload: SessionPayload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -54,10 +60,9 @@ export async function encrypt(payload: SessionPayload) {
     .sign(encodedKey);
 }
 
-export async function decrypt(session: string | undefined = "") {
+async function decrypt(session: string | undefined = ""): Promise<SessionPayload | null> {
   try {
     if (!session || session.trim() === "") {
-      // No session token provided - user is not authenticated
       return null;
     }
 
@@ -65,21 +70,14 @@ export async function decrypt(session: string | undefined = "") {
       algorithms: ["HS256"],
     });
     
-    // Optional: Log successful session verification in development only
     if (process.env.NODE_ENV === "development") {
-      console.log("✅ Session verified successfully for user:", payload.userId);
+      console.log("✅ Session verified for:", payload.email);
     }
     
-    return payload;
+    return payload as unknown as SessionPayload;
   } catch (error) {
-    // Only log actual errors, not missing sessions
     if (session && session.trim() !== "") {
-      console.warn("⚠️ Session verification failed:", {
-        hasSession: !!session,
-        sessionLength: session?.length || 0,
-        error: error instanceof Error ? error.message : "Unknown error",
-        timestamp: new Date().toISOString()
-      });
+      console.warn("⚠️ Session verification failed:", error instanceof Error ? error.message : "Unknown error");
     }
     return null;
   }
