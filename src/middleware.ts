@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./app/lib/session";
 
 const protectedRoutes = ["/dashboard"];
-const publicRoutes = ["/login", "/signup"];
+const publicRoutes = ["/login", "/signup", "/"];
 
 export default async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -26,3 +26,22 @@ export default async function middleware(req: NextRequest) {
 
   return NextResponse.next();
 }
+
+//Run middleware on all routes except for these paths (for performance)
+export const config = {
+  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+};
+
+/*
+    ✅ Middleware RUNS on:
+    - /
+    - /login
+    - /signup  
+    - /dashboard
+
+    ❌ Middleware SKIPS:
+    - /api/users
+    - /_next/static/css/app.css
+    - /_next/image/photo.jpg
+    - /logo.png
+*/
