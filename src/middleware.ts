@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./app/lib/session";
 
-const protectedRoutes = ["/dashboard"];
+const protectedRoutes = ["/dashboard", "/shop", "/cart", "/profile"];
 const publicRoutes = ["/login", "/signup", "/"];
 
 export default async function middleware(req: NextRequest) {
@@ -44,4 +44,24 @@ export const config = {
     - /_next/static/css/app.css
     - /_next/image/photo.jpg
     - /logo.png
+*/
+
+/*
+
+User Flow:
+
+ UNAUTHENTICATED USERS:
+┌─────────────────────────┐
+│ / (Home)                │ ← Browse laptops, see features
+│ ├─ Sign In → /login     │ 
+│ └─ Sign Up → /signup    │
+└─────────────────────────┘
+
+ AUTHENTICATED USERS:
+┌─────────────────────────┐
+│ /dashboard              │ ← Overview, stats, recent orders
+│ ├─ /shop                │ ← Browse & add to cart
+│ ├─ /cart                │ ← Review items, checkout
+│ └─ /profile             │ ← Settings, logout
+└─────────────────────────┘
 */

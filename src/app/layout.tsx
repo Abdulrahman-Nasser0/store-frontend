@@ -1,24 +1,29 @@
 import type { Metadata } from "next";
 import { inter } from '@/app/ui/fonts';
 import "./globals.css";
-
+import Header from "./components/Header";
+import { getSession } from "./lib/session";
 
 export const metadata: Metadata = {
-  title: "Laptop Store",
+  title: "TechStore",
   description: "A store for laptops",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getSession();
+  const isAuthenticated = !!session;
+
   return (
     <html lang="en">
       <body
         className={`${inter.className} antialiased`}
         suppressHydrationWarning={true}
       >
+        <Header isAuthenticated={isAuthenticated} />
         {children}
       </body>
     </html>
