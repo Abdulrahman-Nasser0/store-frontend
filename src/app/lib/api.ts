@@ -62,15 +62,11 @@ async function apiCall<T>(
       },
     });
 
-    console.log(`📊 Response Status: ${response.status} ${response.statusText}`);
     
-    // Get response text first
     const responseText = await response.text();
-    console.log('📥 Response Text:', responseText);
 
     // Check if response is empty
     if (!responseText || responseText.trim() === '') {
-      console.error('❌ Empty response from server');
       return {
         isSuccess: false,
         message: `Server returned empty response (Status: ${response.status})`,
@@ -87,9 +83,8 @@ async function apiCall<T>(
     try {
       data = JSON.parse(responseText);
     } catch (parseError) {
-      // refresh token 
-      console.error('❌ JSON Parse Error:', parseError);
-      console.error('📄 Invalid JSON:', responseText);
+      console.error('JSON Parse Error:', parseError);
+      console.error('Invalid JSON:', responseText);
       return {
         isSuccess: false,
         message: "Invalid JSON response from server",
@@ -101,21 +96,38 @@ async function apiCall<T>(
       };
     }
     
-    // Log success in development
-    if (process.env.NODE_ENV === "development") {
-      console.log(`✅ API ${options.method || "GET"} ${endpoint}:`, {
-        status: response.status,
-        isSuccess: data.isSuccess,
-        message: data.message,
-      });
-    }
 
     return data;
     
   } catch (error) {
     console.error("❌ API call failed:", error);
     console.error('🔗 Failed URL:', url);
-    
+
+    // Refresh token 
+    if (error instanceof Response && error.status === 401 && options.headers) {
+      const headers = { ...options.headers } as Record<string, string>;
+      const session = await getSession();
+      if (session?.refreshTokenExpiration) {
+        const refreshResponse = await refreshTokenApi(session.refreshTokenExpiration);
+        if (refreshResponse.isSuccess && refreshResponse.data?.token) {
+          await createSession(
+            session.userId,
+            session.email,
+            session.name,
+            refreshResponse.data.token,
+            session.roles,
+            session.emailConfirmed,
+            refreshResponse.data.refreshTokenExpiration
+          );
+          // Retry the original request with the new token
+          headers.Authorization = `Bearer ${refreshResponse.data.token}`;
+          return apiCall<T>(endpoint, { ...options, headers });
+        } else {
+          console.error("❌ Token refresh failed");
+        }
+      }
+    }
+
     // Return error in backend format
     return {
       isSuccess: false,
@@ -227,6 +239,9 @@ export async function resetPasswordApi(
 export async function refreshTokenApi(refreshToken: string) {
   return apiCall<LoginResponse>("/api/Auth/refresh-token", {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
     body: JSON.stringify({ refreshToken }),
   });
 }
@@ -284,3 +299,5 @@ export async function getProductById(id: string, token?: string) {
     headers,
   });
 }
+
+import { getSession, createSession } from "./session";
