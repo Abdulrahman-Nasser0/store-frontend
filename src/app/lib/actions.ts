@@ -165,7 +165,7 @@ export async function signUp(_prevState: any, formData: FormData): Promise<SignU
       });
     }
 
-    // If no field-specific errors, show general error on email field
+    // General error on email field
     if (Object.keys(fieldErrors).length === 0) {
       fieldErrors.email = [response.message];
     }
@@ -176,7 +176,7 @@ export async function signUp(_prevState: any, formData: FormData): Promise<SignU
     };
   }
 
-  // 4. Registration successful - redirect to email verification page
+  // 4. To email verification page
   redirect(`/verify-email?email=${encodeURIComponent(email)}`);
 }
 
@@ -212,10 +212,10 @@ export async function getUserProfile() {
 
   try {
     const session = await getSession();
-    // console.log("Server session:", session); // Debug log
 
+    
     if (!session?.token) {
-      // console.log("No token found in session"); // Debug log
+
       return {
         isSuccess: false,
         message: "No authentication token found",
@@ -224,10 +224,10 @@ export async function getUserProfile() {
     }
 
     const response = await authStatusApi(session.token);
-    // console.log("Auth status API response:", response); // Debug log
+
     return response;
-  } catch (error) {
-    console.error("Profile fetch error:", error);
+  } catch {
+
     return {
       isSuccess: false,
       message: "Failed to fetch user profile",

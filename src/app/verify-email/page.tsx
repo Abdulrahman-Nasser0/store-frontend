@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, redirect } from 'next/navigation';
 import Link from 'next/link';
+import { confirmEmailApi, resendVerificationApi } from '../lib/api';
 
 export default function VerifyEmail() {
   const searchParams = useSearchParams();
@@ -21,23 +22,15 @@ export default function VerifyEmail() {
     setMessage('');
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Auth/confirm-email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, code }),
-      });
+      const response = await confirmEmailApi(email, code);
 
-      const data = await response.json();
-
-      if (data.isSuccess) {
+      if (response.isSuccess) {
         setMessage('Email verified successfully! Redirecting to login...');
-        setTimeout(() => {
-          window.location.href = '/login';
-        }, 2000);
+        redirect('/login');
       } else {
-        setError(data.message || 'Verification failed');
+        setError(response.message || 'Verification failed');
       }
-    } catch (err) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setLoading(false);
@@ -50,20 +43,14 @@ export default function VerifyEmail() {
     setMessage('');
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/Auth/resend-verification-code`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, verificationType: 0 }), // 0 for email verification
-      });
+      const response = await resendVerificationApi(email, 0); // 0 for email verification
 
-      const data = await response.json();
-
-      if (data.isSuccess) {
+      if (response.isSuccess) {
         setMessage('Verification code sent! Check your email.');
       } else {
-        setError(data.message || 'Failed to resend code');
+        setError(response.message || 'Failed to resend code');
       }
-    } catch (err) {
+    } catch {
       setError('Network error. Please try again.');
     } finally {
       setResending(false);

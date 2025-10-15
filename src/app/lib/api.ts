@@ -200,7 +200,7 @@ export async function authStatusApi(token: string) {
 
 // Confirm Email
 export async function confirmEmailApi(email: string, code: string) {
-  return apiCall<null>("/api/Auth/ConfirmEmail", {
+  return apiCall<null>("/api/Auth/confirm-email", {
     method: "POST",
     body: JSON.stringify({ email, code }),
   });
@@ -208,7 +208,7 @@ export async function confirmEmailApi(email: string, code: string) {
 
 // Resend Verification Code
 export async function resendVerificationApi(email: string, verificationType: number) {
-  return apiCall<null>("/api/Auth/ResendVerificationCode", {
+  return apiCall<null>("/api/Auth/resend-verification-code", {
     method: "POST",
     body: JSON.stringify({ email, verificationType }),
   });
@@ -216,7 +216,7 @@ export async function resendVerificationApi(email: string, verificationType: num
 
 // Forgot Password
 export async function forgotPasswordApi(email: string) {
-  return apiCall<null>("/api/Auth/ForgotPassword", {
+  return apiCall<null>("/api/Auth/forgot-password", {
     method: "POST",
     body: JSON.stringify({ email }),
   });
@@ -229,7 +229,7 @@ export async function resetPasswordApi(
   newPassword: string,
   confirmPassword: string
 ) {
-  return apiCall<null>("/api/Auth/ResetPassword", {
+  return apiCall<null>("/api/Auth/reset-password", {
     method: "POST",
     body: JSON.stringify({ email, code, newPassword, confirmPassword }),
   });
@@ -253,7 +253,7 @@ export async function changePasswordApi(
   confirmPassword: string,
   token: string
 ) {
-  return apiCall<null>("/api/Auth/ChangePassword", {
+  return apiCall<null>("/api/Auth/change-password", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${token}`,
