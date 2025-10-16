@@ -20,7 +20,7 @@ export default async function middleware(req: NextRequest) {
   }
 
   // Redirect authenticated users from auth pages
-  if (isPublicRoute && session?.userId && (path === "/login" || path === "/signup" || path === "/forgot-password" || path === "/verify-email")) {
+  if (isPublicRoute && session?.userId && (path === "/" || path === "/login" || path === "/signup" || path === "/forgot-password" || path === "/verify-email")) {
     return NextResponse.redirect(new URL("/dashboard", req.nextUrl));
   }
 
