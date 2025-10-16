@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import SearchBar from "./SearchBar";
 
 interface MobileMenuProps {
   isMenuOpen: boolean;
@@ -9,60 +8,51 @@ interface MobileMenuProps {
 }
 
 export default function MobileMenu({ isMenuOpen, setIsMenuOpen, isAuthenticated = false }: MobileMenuProps) {
-  const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-    }
-  };
-
   if (!isMenuOpen) return null;
 
   return (
     <div className="md:hidden border-t border-gray-200 py-4">
       <div className="space-y-4">
         {/* Mobile Search */}
-        <form onSubmit={handleSearch} className="relative">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search laptops..."
-            className="w-full pl-4 pr-12 text-black py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-          />
-          <svg
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors duration-200 cursor-pointer"
-            onClick={() => {
-              if (searchQuery.trim()) {
-                handleSearch({ preventDefault: () => {} } as React.FormEvent);
-              }
-            }}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </form>
+        <SearchBar isMobile={true} onMenuClose={() => setIsMenuOpen(false)} />
 
         {/* Mobile Navigation */}
-        <div className="space-y-2">
-          <Link href="/" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md" onClick={() => setIsMenuOpen(false)}>Home</Link>
-          <Link href="/shop" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md" onClick={() => setIsMenuOpen(false)}>Shop</Link>
-          <Link href="/deals" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md" onClick={() => setIsMenuOpen(false)}>Deals</Link>
-          <Link href="/wishlist" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md" onClick={() => setIsMenuOpen(false)}>Wishlist</Link>
-          <Link href="/cart" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md" onClick={() => setIsMenuOpen(false)}>Cart</Link>
+        <div className="space-y-1">
+          <Link
+            href="/shop"
+            className="flex items-center px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+            </svg>
+            Shop
+          </Link>
         </div>
 
         {/* Mobile Auth */}
         {!isAuthenticated && (
-          <div className="border-t border-gray-200 pt-4 space-y-2">
-            <Link href="/login" className="block px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md" onClick={() => setIsMenuOpen(false)}>Sign In</Link>
-            <Link href="/signup" className="block px-3 py-2 bg-blue-600 text-white hover:bg-blue-700 rounded-md text-center" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
+          <div className="border-t border-gray-200 pt-4 space-y-3">
+            <Link
+              href="/login"
+              className="flex items-center justify-center w-full px-4 py-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium border border-gray-200 hover:border-blue-300"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              </svg>
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
+              className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+              </svg>
+              Sign Up
+            </Link>
           </div>
         )}
       </div>

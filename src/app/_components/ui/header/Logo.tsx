@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function Logo() {
   return (
-    <div className="flex items-center mr-12">
+    <div className="flex items-center ">
       <Link href="/" className="flex items-center space-x-2">
         <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
           <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
