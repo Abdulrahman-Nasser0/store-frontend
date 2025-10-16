@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Image configuration for external hosts
+  images: {
+    domains: ['res.cloudinary.com'],
+  },
+  
   // Improve build reliability
   experimental: {
     workerThreads: false,

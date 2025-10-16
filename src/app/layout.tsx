@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { inter } from '@/app/ui/fonts';
 import "./globals.css";
-import Header from "./components/Header";
+import Header from "./_components/ui/Header";
 import { getSession } from "./lib/session";
 
 export const metadata: Metadata = {
