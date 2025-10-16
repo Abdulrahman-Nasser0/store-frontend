@@ -305,7 +305,7 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-gray-400">
                 <li><Link href="/shop" className="hover:text-white transition-colors">Shop</Link></li>
-                <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
+                <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
                 <li><Link href="/support" className="hover:text-white transition-colors">Support</Link></li>
               </ul>
             </div>
@@ -321,8 +321,8 @@ export default function Home() {
               <h4 className="font-semibold mb-4">Contact</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>support@techzone.com</li>
-                <li>1-800-TECHZONE</li>
-                <li>Mon-Fri 9AM-6PM</li>
+                <li>1-800-TechZone</li>
+                <li>Sat-Thu 11AM-10PM</li>
               </ul>
             </div>
           </div>
