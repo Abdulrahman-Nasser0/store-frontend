@@ -241,7 +241,7 @@ export default async function Home() {
                 </li>
                 <li>
                   <Link
-                    href="/about"
+                    href="/"
                     className="hover:text-white transition-colors"
                   >
                     About Us
@@ -249,7 +249,7 @@ export default async function Home() {
                 </li>
                 <li>
                   <Link
-                    href="/support"
+                    href="/"
                     className="hover:text-white transition-colors"
                   >
                     Support
@@ -276,14 +276,7 @@ export default async function Home() {
                     Sign Up
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    href="/profile"
-                    className="hover:text-white transition-colors"
-                  >
-                    Profile
-                  </Link>
-                </li>
+                
               </ul>
             </div>
             <div>

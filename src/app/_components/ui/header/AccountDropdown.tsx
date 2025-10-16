@@ -15,9 +15,7 @@ export default function AccountDropdown() {
     <Dropdown trigger={trigger} align="right">
       <div className="py-1">
         <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</Link>
-        <Link href="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Order History</Link>
-        <Link href="/wishlist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Wishlist</Link>
-        <Link href="/settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
+        <Link href="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
         <div className="border-t border-gray-100 my-1"></div>
         <form action={logout} className="px-4 py-2 hover:bg-gray-100">
           <button type="submit" className="text-red-600 cursor-pointer hover:text-red-800 text-sm w-full text-left">
