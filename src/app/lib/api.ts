@@ -1,4 +1,3 @@
-// lib/api.ts
 "use server";
 
 // Import types from your types file
@@ -263,38 +262,77 @@ export async function changePasswordApi(
 }
 
 // ==========================================
-// PRODUCTS API CALLS (for later)
+// LAPTOPS API CALLS
 // ==========================================
 
-export interface Product {
-  id: string;
+export interface Laptop {
+  id: number;
   name: string;
-  description: string;
   price: number;
-  image: string;
   category: string;
-  stock: number;
+  images: string[];
+  rate: number;
+  reviewsCount: number;
+  isDiscounted: boolean;
+  discountedPrice: number | null;
+  shortDescription: string;
 }
 
-export async function getProducts(token?: string) {
+export interface PaginatedLaptopsResponse {
+  items: Laptop[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+  startIndex: number;
+  endIndex: number;
+}
+
+export async function getLaptops({
+  page = 1,
+  pageSize = 10,
+  search,
+  sortBy,
+  sortDirection,
+  token
+}: {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  sortBy?: 0 | 1 | 2; // 0 = Id, 1 = ModelName, 2 = Price
+  sortDirection?: 0 | 1; // 0 = Asc, 1 = Desc
+  token?: string;
+} = {}) {
+  const params = new URLSearchParams();
+  if (page !== undefined) params.append('Page', page.toString());
+  if (pageSize !== undefined) params.append('PageSize', pageSize.toString());
+  if (search) params.append('Search', search);
+  if (sortBy !== undefined) params.append('SortBy', sortBy.toString());
+  if (sortDirection !== undefined) params.append('SortDirection', sortDirection.toString());
+
+  const queryString = params.toString();
+  const endpoint = `/api/Laptop${queryString ? `?${queryString}` : ''}`;
+
   const headers: Record<string, string> = {};
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
   
-  return apiCall<Product[]>("/api/products", {
+  return apiCall<PaginatedLaptopsResponse>(endpoint, {
     method: "GET",
     headers,
   });
 }
 
-export async function getProductById(id: string, token?: string) {
+export async function getLaptopById(id: string, token?: string) {
   const headers: Record<string, string> = {};
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
   
-  return apiCall<Product>(`/api/products/${id}`, {
+  return apiCall<Laptop>(`/api/Laptop/${id}`, {
     method: "GET",
     headers,
   });
