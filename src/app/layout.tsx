@@ -5,7 +5,7 @@ import Header from "./components/Header";
 import { getSession } from "./lib/session";
 
 export const metadata: Metadata = {
-  title: "TechStore",
+  title: "TechZone",
   description: "A store for laptops",
 };
 
