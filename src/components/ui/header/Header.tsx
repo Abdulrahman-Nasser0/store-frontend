@@ -1,6 +1,6 @@
 "use client";
 
-import { useMenuState } from "../../../hooks/useMenuState";
+import { useMenuState } from "@/hooks/useMenuState";
 import PromotionalBanner from "./PromotionalBanner";
 import Logo from "./Logo";
 import DesktopNavigation from "./DesktopNavigation";
