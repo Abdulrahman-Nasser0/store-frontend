@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { decrypt } from "./app/lib/session";
+import { decrypt } from "./lib/session";
 
 const protectedRoutes = ["/dashboard", "/shop", "/cart", "/profile"];
 const publicRoutes = ["/login", "/signup", "/", "/forgot-password", "/verify-email"];

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { inter } from '@/app/_components/ui/fonts';
 import "./globals.css";
 import Header from "./_components/ui/header";
-import { getSession } from "./lib/session";
+import { getSession } from "../lib/session";
 
 export const metadata: Metadata = {
   title: "TechZone",

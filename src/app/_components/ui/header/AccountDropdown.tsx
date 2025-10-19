@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { logout } from "../../../lib/actions";
+import { logout } from "../../../../lib/actions";
 import Dropdown from "./Dropdown";
 
 export default function AccountDropdown() {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getLaptops } from "./lib/api";
+import { getLaptops } from "../lib/api";
 import LaptopCard from "./_components/ui/laptop-card";
 
 export default async function Home() {
