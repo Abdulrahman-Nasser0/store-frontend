@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getLaptops } from "../lib/api";
-import LaptopCard from "./_components/ui/laptop-card";
+import LaptopCard from "../components/ui/laptop-card";
 
 export default async function Home() {
   const laptopsResponse = await getLaptops({ pageSize: 9 }); // Fetch first 9 laptops

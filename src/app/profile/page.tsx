@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { getUserProfile } from "../../lib/actions";
-import { AuthStatusResponse } from "../../lib/api";
+import { AuthStatusResponse } from "../../lib/types";
 
 export default function Profile() {
   const [userData, setUserData] = useState<AuthStatusResponse | null>(null);
