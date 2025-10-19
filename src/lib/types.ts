@@ -113,3 +113,13 @@ export interface AuthStatusResponse {
   roles: string[];
   tokenExpiry: string | null;
 }
+
+export interface LaptopCardProps {
+  laptop: Laptop;
+}
+
+export interface LaptopsGridProps {
+  laptops: Laptop[];
+  loading: boolean;
+  error: string | null;
+}

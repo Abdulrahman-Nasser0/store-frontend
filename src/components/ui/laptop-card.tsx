@@ -1,17 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Laptop } from "@/lib/types";
+import { LaptopCardProps } from "@/lib/types";
 
-interface LaptopCardProps {
-  laptop: Laptop;
-}
+
 
 export default function LaptopCard({ laptop }: LaptopCardProps) {
   return (
     <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
       <div className="aspect-w-16 aspect-h-9 bg-gray-200">
         <Image
-          src={laptop.images[0]}
+          src={laptop.images && laptop.images[0] ? laptop.images[0] : "/fallback.jpeg"}
           alt={laptop.name}
           width={400}
           height={300}
