@@ -7,7 +7,8 @@ export default async function Home() {
   const laptops = laptopsResponse.isSuccess
     ? laptopsResponse.data?.items || []
     : [];
-  return (
+
+    return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
       <div className="relative overflow-hidden">

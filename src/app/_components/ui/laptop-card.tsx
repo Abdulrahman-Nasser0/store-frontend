@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-interface Laptop {
+export interface Laptop {
   id: number;
   name: string;
   price: number;
@@ -13,6 +13,7 @@ interface Laptop {
   discountedPrice: number | null;
   shortDescription: string;
 }
+
 
 interface LaptopCardProps {
   laptop: Laptop;
