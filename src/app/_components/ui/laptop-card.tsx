@@ -1,19 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-
-export interface Laptop {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  images: string[];
-  rate: number;
-  reviewsCount: number;
-  isDiscounted: boolean;
-  discountedPrice: number | null;
-  shortDescription: string;
-}
-
+import { Laptop } from "@/lib/types";
 
 interface LaptopCardProps {
   laptop: Laptop;

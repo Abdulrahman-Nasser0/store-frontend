@@ -1,40 +1,6 @@
 "use server";
+import { LaptopById, PaginatedLaptopsResponse, ApiResponse, LoginRequest, RegisterRequest , LoginResponse, AuthStatusResponse  } from './types'
 
-// Import types from your types file
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface ApiResponse<T = any> {
-  isSuccess: boolean;
-  message: string;
-  messageAr?: string;
-  data: T;
-  errors?: string[];
-  statusCode: number;
-  timestamp: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface RegisterRequest {
-  userName: string;
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface LoginResponse {
-  message: string | null;
-  isAuthenticated: boolean;
-  username: string;
-  email: string;
-  roles: string[];
-  token: string;
-  emailConfirmed: boolean;
-  refreshTokenExpiration: string;
-}
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -178,15 +144,6 @@ export async function logoutApi(token: string) {
   });
 }
 
-export interface AuthStatusResponse {
-  isAuthenticated: boolean;
-  username: string | null;
-  userId: string;
-  email: string;
-  roles: string[];
-  tokenExpiry: string | null;
-}
-
 // Auth Status
 export async function authStatusApi(token: string) {
   return apiCall<AuthStatusResponse | null>("/api/Auth/status", {
@@ -262,60 +219,8 @@ export async function changePasswordApi(
 }
 
 // ==========================================
-// LAPTOPS API CALLS
+// LAPTOP API CALLS
 // ==========================================
-
-export interface Laptop {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  images: string[];
-  rate: number;
-  reviewsCount: number;
-  isDiscounted: boolean;
-  discountedPrice: number | null;
-  shortDescription: string;
-}
-export interface LaptopById {
-  id: number;
-  modelName: string;
-  processor: string;
-  gpu: string;
-  screenSize: string;
-  hasCamera: boolean;
-  hasKeyboard: boolean;
-  hasTouchScreen: boolean;
-  ports: string;
-  description: string;
-  notes: string;
-  warranty: string;
-  brandId: number;
-  categoryId: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  brand: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  category: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  variants: any[];
-  images: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ratings: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  repairRequests: any[];
-}
-
-export interface PaginatedLaptopsResponse {
-  items: Laptop[];
-  page: number;
-  pageSize: number;
-  totalCount: number;
-  totalPages: number;
-  hasPrevious: boolean;
-  hasNext: boolean;
-  startIndex: number;
-  endIndex: number;
-}
 
 export async function getLaptops({
   page = 1,
