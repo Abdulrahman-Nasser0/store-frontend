@@ -16,8 +16,6 @@ async function apiCall<T>(
   const url = `${API_URL}${endpoint}`;
   
   try {
-    console.log(`🔵 API Request: ${options.method || "GET"} ${url}`);
-    console.log('📤 Request Body:', options.body);
     
     const response = await fetch(url, {
       ...options,

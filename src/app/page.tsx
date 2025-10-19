@@ -1,12 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import { getLaptops } from "../lib/api";
+import { useLaptops } from "@/hooks/useLaptops";
 import LaptopCard from "../components/ui/laptop-card";
 
-export default async function Home() {
-  const laptopsResponse = await getLaptops({ pageSize: 9 }); // Fetch first 9 laptops
-  const laptops = laptopsResponse.isSuccess
-    ? laptopsResponse.data?.items || []
-    : [];
+export default function Home() {
+  const { laptops, loading, error } = useLaptops(9);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
@@ -56,10 +56,24 @@ export default async function Home() {
           </div>
 
           {/* Laptop Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {laptops.map((laptop) => (
-              <LaptopCard key={laptop.id} laptop={laptop} />
-            ))}
+          <div className="min-h-[200px] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {loading ? (
+              <div className="col-span-full flex justify-center items-center py-12">
+                <span className="text-lg text-gray-500 animate-pulse">Loading laptops...</span>
+              </div>
+            ) : error ? (
+              <div className="col-span-full flex justify-center items-center py-12">
+                <span className="text-lg text-red-500">{error}</span>
+              </div>
+            ) : laptops.length === 0 ? (
+              <div className="col-span-full flex justify-center items-center py-12">
+                <span className="text-lg text-gray-500">No laptops found.</span>
+              </div>
+            ) : (
+              laptops.map((laptop) => (
+                <LaptopCard key={laptop.id} laptop={laptop} />
+              ))
+            )}
           </div>
           {/* View All Laptops Button */}
           <div className="text-center mt-12">
