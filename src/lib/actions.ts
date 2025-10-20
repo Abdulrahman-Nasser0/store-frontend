@@ -1,57 +1,10 @@
 "use server";
-import { z } from "zod";
 import { createSession, deleteSession, getSession } from "./session";
 import { redirect } from "next/navigation";
 import { loginApi, registerApi, authStatusApi } from "./api";
+import {LoginState, SignUpState} from "./types";
+import {loginSchema, signUpSchema} from "./validation";
 
-// ==========================================
-// VALIDATION SCHEMAS
-// ==========================================
-
-const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }).trim(),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" })
-    .trim(),
-});
-
-const signUpSchema = z.object({
-  userName: z.string().min(3, { message: "Username must be at least 3 characters" }).trim(),
-  fullName: z.string().min(2, { message: "Full name must be at least 2 characters" }).trim(),
-  email: z.string().email({ message: "Invalid email address" }).trim(),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" })
-    .trim(),
-  confirmPassword: z.string().trim(),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Passwords don't match",
-  path: ["confirmPassword"],
-});
-
-// ==========================================
-// TYPES
-// ==========================================
-
-type LoginState = {
-  errors?: {
-    email?: string[];
-    password?: string[];
-  };
-  message?: string;
-} | undefined;
-
-type SignUpState = {
-  errors?: {
-    userName?: string[];
-    fullName?: string[];
-    email?: string[];
-    password?: string[];
-    confirmPassword?: string[];
-  };
-  message?: string;
-} | undefined;
 
 // ==========================================
 // LOGIN ACTION

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { forgotPasswordApi } from '../lib/api';
+import { forgotPasswordApi } from '../../../lib/api';
 
 export default function ForgotPassword() {
   const searchParams = useSearchParams();

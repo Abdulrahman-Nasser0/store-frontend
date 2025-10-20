@@ -1,12 +1,13 @@
-import Link from "next/link";
-import { getLaptops } from "./lib/api";
-import LaptopCard from "./_components/ui/laptop-card";
+"use client";
 
-export default async function Home() {
-  const laptopsResponse = await getLaptops({ pageSize: 9 }); // Fetch first 9 laptops
-  const laptops = laptopsResponse.isSuccess
-    ? laptopsResponse.data?.items || []
-    : [];
+import Link from "next/link";
+import { useLaptops } from "@/hooks/useLaptops";
+import LaptopCard from "../components/ui/laptop-card";
+import LaptopsGrid from "../components/ui/laptops-grid";
+
+export default function Home() {
+  const { laptops, loading, error } = useLaptops(9);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
@@ -56,11 +57,7 @@ export default async function Home() {
           </div>
 
           {/* Laptop Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {laptops.map((laptop) => (
-              <LaptopCard key={laptop.id} laptop={laptop} />
-            ))}
-          </div>
+          <LaptopsGrid laptops={laptops} loading={loading} error={error} />
           {/* View All Laptops Button */}
           <div className="text-center mt-12">
             <Link

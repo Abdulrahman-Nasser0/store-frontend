@@ -1,40 +1,6 @@
 "use server";
+import { LaptopById, PaginatedLaptopsResponse, ApiResponse, LoginRequest, RegisterRequest , LoginResponse, AuthStatusResponse  } from './types'
 
-// Import types from your types file
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export interface ApiResponse<T = any> {
-  isSuccess: boolean;
-  message: string;
-  messageAr?: string;
-  data: T;
-  errors?: string[];
-  statusCode: number;
-  timestamp: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface RegisterRequest {
-  userName: string;
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-export interface LoginResponse {
-  message: string | null;
-  isAuthenticated: boolean;
-  username: string;
-  email: string;
-  roles: string[];
-  token: string;
-  emailConfirmed: boolean;
-  refreshTokenExpiration: string;
-}
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -50,8 +16,6 @@ async function apiCall<T>(
   const url = `${API_URL}${endpoint}`;
   
   try {
-    console.log(`🔵 API Request: ${options.method || "GET"} ${url}`);
-    console.log('📤 Request Body:', options.body);
     
     const response = await fetch(url, {
       ...options,
@@ -178,15 +142,6 @@ export async function logoutApi(token: string) {
   });
 }
 
-export interface AuthStatusResponse {
-  isAuthenticated: boolean;
-  username: string | null;
-  userId: string;
-  email: string;
-  roles: string[];
-  tokenExpiry: string | null;
-}
-
 // Auth Status
 export async function authStatusApi(token: string) {
   return apiCall<AuthStatusResponse | null>("/api/Auth/status", {
@@ -262,33 +217,8 @@ export async function changePasswordApi(
 }
 
 // ==========================================
-// LAPTOPS API CALLS
+// LAPTOP API CALLS
 // ==========================================
-
-export interface Laptop {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  images: string[];
-  rate: number;
-  reviewsCount: number;
-  isDiscounted: boolean;
-  discountedPrice: number | null;
-  shortDescription: string;
-}
-
-export interface PaginatedLaptopsResponse {
-  items: Laptop[];
-  page: number;
-  pageSize: number;
-  totalCount: number;
-  totalPages: number;
-  hasPrevious: boolean;
-  hasNext: boolean;
-  startIndex: number;
-  endIndex: number;
-}
 
 export async function getLaptops({
   page = 1,
@@ -332,7 +262,7 @@ export async function getLaptopById(id: string, token?: string) {
     headers.Authorization = `Bearer ${token}`;
   }
   
-  return apiCall<Laptop>(`/api/Laptop/${id}`, {
+  return apiCall<LaptopById>(`/api/Laptop/${id}`, {
     method: "GET",
     headers,
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMenuState } from "@/hooks/useMenuState";
 import PromotionalBanner from "./PromotionalBanner";
 import Logo from "./Logo";
 import DesktopNavigation from "./DesktopNavigation";
@@ -12,10 +12,9 @@ interface HeaderProps {
   isAuthenticated?: boolean;
 }
 
-export default function Header({ isAuthenticated = false }: HeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+export default function Header({ isAuthenticated = false }: HeaderProps) {
+  const [isMenuOpen, toggleMenu, setIsMenuOpen] = useMenuState();
 
   return (
     <>

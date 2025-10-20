@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { inter } from '@/app/_components/ui/fonts';
+import { inter } from '@/components/ui/fonts';
 import "./globals.css";
-import Header from "./_components/ui/header";
-import { getSession } from "./lib/session";
+import Header from "../components/ui/header";
+import { getSession } from "../lib/session";
 
 export const metadata: Metadata = {
   title: "TechZone",
@@ -19,6 +19,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body
         className={`${inter.className} antialiased`}
         suppressHydrationWarning={true}

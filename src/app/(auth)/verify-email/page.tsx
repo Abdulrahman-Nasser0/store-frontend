@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useSearchParams, redirect } from 'next/navigation';
 import Link from 'next/link';
-import { confirmEmailApi, resendVerificationApi } from '../lib/api';
+import { confirmEmailApi, resendVerificationApi } from '../../../lib/api';
 
 export default function VerifyEmail() {
   const searchParams = useSearchParams();
