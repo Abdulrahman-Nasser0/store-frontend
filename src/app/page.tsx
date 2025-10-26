@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useLaptops } from "@/hooks/useLaptops";
-import LaptopCard from "../components/ui/laptop-card";
 import LaptopsGrid from "../components/ui/laptops-grid";
 
 export default function Home() {

@@ -29,6 +29,7 @@ export function useLaptops(pageSize = 9, search?: string, category?: string) {
               if (typeof laptop.category === 'string') {
                 return laptop.category.toLowerCase() === category.toLowerCase();
               } else if (laptop.category && typeof laptop.category === 'object' && 'name' in laptop.category) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 return (laptop.category as any).name?.toLowerCase() === category.toLowerCase();
               }
               return false;
