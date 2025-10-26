@@ -1,4 +1,15 @@
+```bash
+git branch --show-current
+git fetch origin main
+git branch
+```
 
+```bash
+git checkout main
+git branch -D frontend-moaiad
+git pull origin main
+git checkout -b frontend-moaiad
+```
 
 # Collaboration Guide
 

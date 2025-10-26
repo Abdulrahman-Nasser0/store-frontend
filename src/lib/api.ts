@@ -224,6 +224,7 @@ export async function getLaptops({
   page = 1,
   pageSize = 10,
   search,
+  category,
   sortBy,
   sortDirection,
   token
@@ -231,6 +232,7 @@ export async function getLaptops({
   page?: number;
   pageSize?: number;
   search?: string;
+  category?: string;
   sortBy?: 0 | 1 | 2; // 0 = Id, 1 = ModelName, 2 = Price
   sortDirection?: 0 | 1; // 0 = Asc, 1 = Desc
   token?: string;
@@ -239,6 +241,7 @@ export async function getLaptops({
   if (page !== undefined) params.append('Page', page.toString());
   if (pageSize !== undefined) params.append('PageSize', pageSize.toString());
   if (search) params.append('Search', search);
+  if (category) params.append('Category', category);
   if (sortBy !== undefined) params.append('SortBy', sortBy.toString());
   if (sortDirection !== undefined) params.append('SortDirection', sortDirection.toString());
 
@@ -249,7 +252,7 @@ export async function getLaptops({
   if (token) {
     headers.Authorization = `Bearer ${token}`;
   }
-  
+
   return apiCall<PaginatedLaptopsResponse>(endpoint, {
     method: "GET",
     headers,
