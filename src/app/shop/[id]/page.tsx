@@ -22,36 +22,41 @@ export default async function LaptopDetails({ params }: LaptopDetailsProps) {
 
   const laptop = response.data;
 
-  // Images fallback
+  // Images - sort by display order
   const images = laptop.images && laptop.images.length > 0
     ? laptop.images
-    : [
-        '/fallback.jpeg', // fallback image in public folder
-      ];
+        .sort((a, b) => a.displayOrder - b.displayOrder)
+        .map(img => img.url)
+    : ['/fallback.jpeg'];
 
-  // Ratings
-  const ratings = Array.isArray(laptop.ratings) ? laptop.ratings : [];
-  const averageRating =
-    ratings.length > 0
-      ? (
-          ratings.reduce((sum, r) => sum + (r.value || 0), 0) / ratings.length
-        ).toFixed(1)
-      : '0.0';
-  const reviewsCount = ratings.length;
+  // Statistics
+  const averageRating = laptop.statistics.averageRating.toFixed(1);
+  const reviewsCount = laptop.statistics.totalReviews;
+
+  // Ports list
+  const portsText = laptop.ports && laptop.ports.length > 0
+    ? laptop.ports.map(port => `${port.quantity}x ${port.type}`).join(', ')
+    : 'No ports specified';
+
+  // Warranty info
+  const warrantyText = laptop.warranty
+    ? `${laptop.warranty.durationMonths} months ${laptop.warranty.type} by ${laptop.warranty.provider}`
+    : 'No warranty information';
 
   // Specifications
   const specifications = [
+    { label: 'Brand', value: laptop.brand.name },
     { label: 'Model', value: laptop.modelName },
     { label: 'Processor', value: laptop.processor },
     { label: 'GPU', value: laptop.gpu },
     { label: 'Screen Size', value: laptop.screenSize },
+    { label: 'Release Year', value: laptop.releaseYear.toString() },
     { label: 'Camera', value: laptop.hasCamera ? 'Yes' : 'No' },
     { label: 'Keyboard', value: laptop.hasKeyboard ? 'Yes' : 'No' },
     { label: 'Touch Screen', value: laptop.hasTouchScreen ? 'Yes' : 'No' },
-    { label: 'Ports', value: laptop.ports },
-    { label: 'Warranty', value: laptop.warranty },
-    { label: 'Description', value: laptop.description },
-    { label: 'Notes', value: laptop.notes || 'None' },
+    { label: 'Ports', value: portsText },
+    { label: 'Store Location', value: laptop.storeLocation },
+    { label: 'Store Contact', value: laptop.storeContact },
   ];
 
   return (
@@ -135,12 +140,50 @@ export default async function LaptopDetails({ params }: LaptopDetailsProps) {
               <p className="text-gray-600 text-lg">{laptop.description}</p>
             </div>
 
-            {/* Pricing */}
+            {/* Warranty */}
             <div className="border-t border-b border-gray-200 py-6">
-              <div className="flex items-center space-x-4">
-                <span className="text-xl text-gray-700">Warranty: {laptop.warranty}</span>
+              <div className="space-y-2">
+                <h3 className="text-lg font-semibold text-gray-900">Warranty Information</h3>
+                <p className="text-gray-700">{warrantyText}</p>
+                {laptop.warranty && (
+                  <p className="text-sm text-gray-600">{laptop.warranty.coverage}</p>
+                )}
               </div>
             </div>
+
+            {/* Variants */}
+            {laptop.variants && laptop.variants.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Available Configurations</h3>
+                <div className="space-y-3">
+                  {laptop.variants.map((variant) => (
+                    <div 
+                      key={variant.id} 
+                      className="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-colors"
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <p className="font-medium text-gray-900">
+                            {variant.ram}GB RAM • {variant.storage}GB {variant.storageType}
+                          </p>
+                          <p className="text-sm text-gray-500 mt-1">SKU: {variant.sku}</p>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Status: <span className={`font-medium ${variant.stockStatus === 'InStock' ? 'text-green-600' : 'text-red-600'}`}>
+                              {variant.stockStatus}
+                            </span>
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-2xl font-bold text-blue-600">
+                            ${variant.currentPrice.toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex space-x-4">
@@ -171,6 +214,29 @@ export default async function LaptopDetails({ params }: LaptopDetailsProps) {
           </div>
         </div>
 
+        {/* Statistics Section */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Product Statistics</h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+              <div className="text-3xl font-bold text-blue-600">{laptop.statistics.averageRating.toFixed(1)}</div>
+              <div className="text-sm text-gray-600 mt-2">Average Rating</div>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+              <div className="text-3xl font-bold text-green-600">{laptop.statistics.totalReviews}</div>
+              <div className="text-sm text-gray-600 mt-2">Total Reviews</div>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+              <div className="text-3xl font-bold text-purple-600">{laptop.statistics.totalSales}</div>
+              <div className="text-sm text-gray-600 mt-2">Units Sold</div>
+            </div>
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 text-center">
+              <div className="text-3xl font-bold text-orange-600">{laptop.statistics.viewCount}</div>
+              <div className="text-sm text-gray-600 mt-2">Views</div>
+            </div>
+          </div>
+        </div>
+
         {/* Reviews Section */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Customer Reviews</h2>
@@ -179,7 +245,7 @@ export default async function LaptopDetails({ params }: LaptopDetailsProps) {
               {reviewsCount === 0 ? (
                 <p>No reviews yet for this product.</p>
               ) : (
-                <p>{reviewsCount} reviews, average rating {averageRating}</p>
+                <p>{reviewsCount} reviews with an average rating of {averageRating} stars</p>
               )}
             </div>
           </div>

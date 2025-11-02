@@ -7,15 +7,22 @@ import LaptopsGrid from "@/components/products/LaptopsGrid";
 
 export default function Shop() {
   const searchParams = useSearchParams();
-  const category = searchParams.get("category");
+  const categoryParam = searchParams.get("category");
+  const categoryIdParam = searchParams.get("categoryId");
   const search = searchParams.get("search");
 
-  const { laptops, loading, error } = useLaptops(1000, search || undefined, category || undefined);
+  // Parse categoryId if provided, otherwise undefined
+  const categoryId = categoryIdParam ? parseInt(categoryIdParam, 10) : undefined;
+
+  const { laptops, loading, error } = useLaptops(1000, search || undefined, categoryId);
 
   // Dynamic title based on filters
   const getPageTitle = () => {
-    if (category) {
-      return `${category.charAt(0).toUpperCase() + category.slice(1)} Laptops`;
+    if (categoryParam) {
+      return `${categoryParam.charAt(0).toUpperCase() + categoryParam.slice(1)} Laptops`;
+    }
+    if (categoryId) {
+      return `Category ${categoryId} Laptops`;
     }
     if (search) {
       return `Search Results for "${search}"`;

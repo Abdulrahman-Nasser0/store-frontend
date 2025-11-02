@@ -6,7 +6,7 @@ import { getLaptops } from "@/lib/api";
 import type { Laptop } from "@/lib/types";
 
 
-export function useLaptops(pageSize = 9, search?: string, category?: string) {
+export function useLaptops(pageSize = 9, search?: string, categoryId?: number) {
   const [laptops, setLaptops] = useState<Laptop[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -16,27 +16,17 @@ export function useLaptops(pageSize = 9, search?: string, category?: string) {
     async function fetchLaptops() {
       setLoading(true);
       try {
-        // Fetch all laptops first (remove category from API call to get all data)
-        const laptopsResponse = await getLaptops({ pageSize: 1000, search });
+        // Fetch laptops with the new API parameters
+        const laptopsResponse = await getLaptops({ 
+          pageSize, 
+          search,
+          categoryId,
+          isActive: true // Only fetch active laptops
+        });
         if (!isMounted) return;
         if (laptopsResponse.isSuccess) {
-          let filteredLaptops = laptopsResponse.data?.items || [];
-
-          // Apply client-side category filtering if category is specified
-          if (category) {
-            filteredLaptops = filteredLaptops.filter(laptop => {
-              // Handle different category formats
-              if (typeof laptop.category === 'string') {
-                return laptop.category.toLowerCase() === category.toLowerCase();
-              } else if (laptop.category && typeof laptop.category === 'object' && 'name' in laptop.category) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                return (laptop.category as any).name?.toLowerCase() === category.toLowerCase();
-              }
-              return false;
-            });
-          }
-
-          setLaptops(filteredLaptops);
+          const fetchedLaptops = laptopsResponse.data?.items || [];
+          setLaptops(fetchedLaptops);
           setError(null);
         } else {
           setLaptops([]);
@@ -54,7 +44,7 @@ export function useLaptops(pageSize = 9, search?: string, category?: string) {
     return () => {
       isMounted = false;
     };
-  }, [pageSize, search, category]);
+  }, [pageSize, search, categoryId]);
 
   return { laptops, loading, error };
 }

@@ -17,45 +17,114 @@ export type SignUpState = {
   message?: string;
 } | undefined;
 
-export interface Laptop {
+// Brand interface
+export interface Brand {
   id: number;
   name: string;
-  price: number;
-  category: string;
-  images: string[];
-  rate: number;
-  reviewsCount: number;
-  isDiscounted: boolean;
-  discountedPrice: number | null;
-  shortDescription: string;
+  country?: string;
+  logoUrl: string;
 }
 
-export interface LaptopById {
+// Category interface
+export interface Category {
+  id: number;
+  name: string;
+  description?: string;
+}
+
+// Price Range interface
+export interface PriceRange {
+  min: number;
+  max: number;
+}
+
+// Port interface
+export interface Port {
+  id: number;
+  type: string;
+  quantity: number;
+}
+
+// Warranty interface
+export interface Warranty {
+  id: number;
+  durationMonths: number;
+  type: string;
+  coverage: string;
+  provider: string;
+}
+
+// Image interface
+export interface LaptopImage {
+  id: number;
+  url: string;
+  isMain: boolean;
+  displayOrder: number;
+}
+
+// Variant interface
+export interface LaptopVariant {
+  id: number;
+  sku: string;
+  ram: number;
+  storage: number;
+  storageType: string;
+  currentPrice: number;
+  stockStatus: string;
+}
+
+// Statistics interface
+export interface LaptopStatistics {
+  averageRating: number;
+  totalReviews: number;
+  totalSales: number;
+  viewCount: number;
+}
+
+// Simple Laptop interface for list view
+export interface Laptop {
   id: number;
   modelName: string;
+  brand: Brand;
+  category: Category;
   processor: string;
   gpu: string;
   screenSize: string;
   hasCamera: boolean;
   hasKeyboard: boolean;
   hasTouchScreen: boolean;
-  ports: string;
+  releaseYear: number;
+  isActive: boolean;
+  variantCount: number;
+  priceRange: PriceRange;
+  averageRating: number;
+  mainImage: string;
+}
+
+// Laptop Complete Details interface for single laptop view
+export interface LaptopById {
+  id: number;
+  modelName: string;
+  brand: Brand;
+  category: Category;
+  processor: string;
+  gpu: string;
+  screenSize: string;
+  hasCamera: boolean;
+  hasKeyboard: boolean;
+  hasTouchScreen: boolean;
   description: string;
-  notes: string;
-  warranty: string;
-  brandId: number;
-  categoryId: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  brand: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  category: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  variants: any[];
-  images: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ratings: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  repairRequests: any[];
+  releaseYear: number;
+  storeLocation: string;
+  storeContact: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  ports: Port[];
+  warranty: Warranty;
+  images: LaptopImage[];
+  variants: LaptopVariant[];
+  statistics: LaptopStatistics;
 }
 
 export interface PaginatedLaptopsResponse {

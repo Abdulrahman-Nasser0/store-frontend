@@ -222,31 +222,40 @@ export async function changePasswordApi(
 
 export async function getLaptops({
   page = 1,
-  pageSize = 10,
+  pageSize = 20,
   search,
-  category,
-  sortBy,
-  sortDirection,
+  brandId,
+  categoryId,
+  isActive,
+  releaseYear,
+  hasCamera,
+  hasTouchScreen,
   token
 }: {
   page?: number;
   pageSize?: number;
   search?: string;
-  category?: string;
-  sortBy?: 0 | 1 | 2; // 0 = Id, 1 = ModelName, 2 = Price
-  sortDirection?: 0 | 1; // 0 = Asc, 1 = Desc
+  brandId?: number;
+  categoryId?: number;
+  isActive?: boolean;
+  releaseYear?: number;
+  hasCamera?: boolean;
+  hasTouchScreen?: boolean;
   token?: string;
 } = {}) {
   const params = new URLSearchParams();
-  if (page !== undefined) params.append('Page', page.toString());
-  if (pageSize !== undefined) params.append('PageSize', pageSize.toString());
-  if (search) params.append('Search', search);
-  if (category) params.append('Category', category);
-  if (sortBy !== undefined) params.append('SortBy', sortBy.toString());
-  if (sortDirection !== undefined) params.append('SortDirection', sortDirection.toString());
+  if (page !== undefined) params.append('page', page.toString());
+  if (pageSize !== undefined) params.append('pageSize', pageSize.toString());
+  if (search) params.append('search', search);
+  if (brandId !== undefined) params.append('brandId', brandId.toString());
+  if (categoryId !== undefined) params.append('categoryId', categoryId.toString());
+  if (isActive !== undefined) params.append('isActive', isActive.toString());
+  if (releaseYear !== undefined) params.append('releaseYear', releaseYear.toString());
+  if (hasCamera !== undefined) params.append('hasCamera', hasCamera.toString());
+  if (hasTouchScreen !== undefined) params.append('hasTouchScreen', hasTouchScreen.toString());
 
   const queryString = params.toString();
-  const endpoint = `/api/Laptop${queryString ? `?${queryString}` : ''}`;
+  const endpoint = `/api/laptops${queryString ? `?${queryString}` : ''}`;
 
   const headers: Record<string, string> = {};
   if (token) {
@@ -265,7 +274,7 @@ export async function getLaptopById(id: string, token?: string) {
     headers.Authorization = `Bearer ${token}`;
   }
   
-  return apiCall<LaptopById>(`/api/Laptop/${id}`, {
+  return apiCall<LaptopById>(`/api/laptops/${id}`, {
     method: "GET",
     headers,
   });
