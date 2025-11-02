@@ -26,4 +26,4 @@ export const USE_MOCK_DATA = true;
 // ========================================
 
 // Re-export mock data functions for convenience
-export { getMockLaptops, getMockLaptopById } from './mockData';
+export { getMockLaptops, getMockLaptopById, getMockLaptopVariants } from './mockData';

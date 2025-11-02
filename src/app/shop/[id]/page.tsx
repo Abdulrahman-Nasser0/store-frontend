@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getLaptopById } from '@/lib/api';
 import { getSession } from '@/lib/session';
-import { Button } from '@/components/common/Button';
+import LaptopVariantsClient from '@/components/products/LaptopVariantsClient';
 
 interface LaptopDetailsProps {
   params: Promise<{ id: string }>;
@@ -151,51 +151,11 @@ export default async function LaptopDetails({ params }: LaptopDetailsProps) {
               </div>
             </div>
 
-            {/* Variants */}
-            {laptop.variants && laptop.variants.length > 0 && (
-              <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Available Configurations</h3>
-                <div className="space-y-3">
-                  {laptop.variants.map((variant) => (
-                    <div 
-                      key={variant.id} 
-                      className="border border-gray-200 rounded-lg p-4 hover:border-blue-500 transition-colors"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <p className="font-medium text-gray-900">
-                            {variant.ram}GB RAM • {variant.storage}GB {variant.storageType}
-                          </p>
-                          <p className="text-sm text-gray-500 mt-1">SKU: {variant.sku}</p>
-                          <p className="text-sm text-gray-600 mt-1">
-                            Status: <span className={`font-medium ${variant.stockStatus === 'InStock' ? 'text-green-600' : 'text-red-600'}`}>
-                              {variant.stockStatus}
-                            </span>
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-2xl font-bold text-blue-600">
-                            ${variant.currentPrice.toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Action Buttons */}
-            <div className="flex space-x-4">
-              <Button
-                type="button"
-                variant="primary"
-                fullWidth
-                className="font-medium"
-              >
-                Add to Cart
-              </Button>
-            </div>
+            {/* Variants - New Interactive Component */}
+            <LaptopVariantsClient 
+              laptopId={laptop.id} 
+              token={token}
+            />
 
             {/* Key Features */}
             <div>

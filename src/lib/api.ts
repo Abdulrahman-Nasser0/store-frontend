@@ -1,6 +1,6 @@
 "use server";
-import { LaptopById, PaginatedLaptopsResponse, ApiResponse, LoginRequest, RegisterRequest , LoginResponse, AuthStatusResponse  } from './types'
-import { USE_MOCK_DATA, getMockLaptops, getMockLaptopById } from './mock-data/config'
+import { LaptopById, PaginatedLaptopsResponse, ApiResponse, LoginRequest, RegisterRequest , LoginResponse, AuthStatusResponse, LaptopVariantsResponse  } from './types'
+import { USE_MOCK_DATA, getMockLaptops, getMockLaptopById, getMockLaptopVariants } from './mock-data/config'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -315,6 +315,64 @@ export async function getLaptopById(id: string, token?: string) {
   }
   
   return apiCall<LaptopById>(`/api/laptops/${id}`, {
+    method: "GET",
+    headers,
+  });
+}
+
+export async function getLaptopVariants({
+  laptopId,
+  page = 1,
+  pageSize = 10,
+  inStockOnly = false,
+  token
+}: {
+  laptopId: number;
+  page?: number;
+  pageSize?: number;
+  inStockOnly?: boolean;
+  token?: string;
+}) {
+  // Return mock data if enabled
+  if (USE_MOCK_DATA) {
+    try {
+      const mockData = getMockLaptopVariants(laptopId, page, pageSize, inStockOnly);
+      return Promise.resolve({
+        isSuccess: true,
+        message: "Laptop variants fetched successfully (mock data)",
+        messageAr: "تم جلب أنواع اللابتوب بنجاح",
+        data: mockData,
+        errors: [],
+        statusCode: 200,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<LaptopVariantsResponse>);
+    } catch (error) {
+      return Promise.resolve({
+        isSuccess: false,
+        message: error instanceof Error ? error.message : "Laptop not found",
+        messageAr: "لم يتم العثور على اللابتوب",
+        data: null as unknown as LaptopVariantsResponse,
+        errors: [error instanceof Error ? error.message : "Laptop not found"],
+        statusCode: 404,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<LaptopVariantsResponse>);
+    }
+  }
+
+  const params = new URLSearchParams();
+  if (page !== undefined) params.append('page', page.toString());
+  if (pageSize !== undefined) params.append('pageSize', pageSize.toString());
+  if (inStockOnly !== undefined) params.append('inStockOnly', inStockOnly.toString());
+
+  const queryString = params.toString();
+  const endpoint = `/api/laptops/${laptopId}/variants${queryString ? `?${queryString}` : ''}`;
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return apiCall<LaptopVariantsResponse>(endpoint, {
     method: "GET",
     headers,
   });

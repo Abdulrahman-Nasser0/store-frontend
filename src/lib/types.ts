@@ -62,7 +62,7 @@ export interface LaptopImage {
   displayOrder: number;
 }
 
-// Variant interface
+// Variant interface (basic - used in laptop list)
 export interface LaptopVariant {
   id: number;
   sku: string;
@@ -73,6 +73,83 @@ export interface LaptopVariant {
   stockStatus: string;
 }
 
+// Detailed Variant interface (used in variants API)
+export interface LaptopVariantDetailed {
+  id: number;
+  sku: string;
+  ram: number;
+  storage: number;
+  storageType: string;
+  currentPrice: number;
+  originalPrice: number;
+  discountPercentage: number;
+  discountAmount?: number;
+  stockQuantity: number;
+  reservedQuantity: number;
+  availableQuantity: number;
+  stockStatus: string;
+  reorderLevel?: number;
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface VariantSelectorProps {
+  variants: LaptopVariantDetailed[];
+  selectedVariant: LaptopVariantDetailed | null;
+  onVariantSelect: (variant: LaptopVariantDetailed) => void;
+}
+
+export interface LaptopVariantsClientProps {
+  laptopId: number;
+  token?: string;
+}
+
+// Laptop info in variants response
+export interface LaptopVariantInfo {
+  id: number;
+  modelName: string;
+  processor: string;
+  gpu: string;
+  screenSize: string;
+  hasCamera: boolean;
+  hasTouchScreen: boolean;
+}
+
+// Paginated variants response
+export interface PaginatedVariantsResponse {
+  items: LaptopVariantDetailed[];
+  page: number;
+  pageSize: number;
+  totalCount: number;
+  totalPages: number;
+  hasPrevious: boolean;
+  hasNext: boolean;
+  startIndex: number;
+  endIndex: number;
+}
+
+// Laptop variants API response
+export interface LaptopVariantsResponse {
+  laptop: LaptopVariantInfo;
+  variants: PaginatedVariantsResponse;
+}
+export interface UseVariantsOptions {
+  laptopId: number;
+  page?: number;
+  pageSize?: number;
+  inStockOnly?: boolean;
+  token?: string;
+}
+
+export interface UseVariantsReturn {
+  variants: LaptopVariantDetailed[];
+  laptopInfo: LaptopVariantInfo | null;
+  loading: boolean;
+  error: string | null;
+  totalCount: number;
+  refetch: () => void;
+}
 // Statistics interface
 export interface LaptopStatistics {
   averageRating: number;
