@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getLaptopById } from '@/lib/api';
 import { getSession } from '@/lib/session';
 import LaptopVariantsClient from '@/components/products/LaptopVariantsClient';
+import ProductImageGallery from '@/components/products/ProductImageGallery';
 
 interface LaptopDetailsProps {
   params: Promise<{ id: string }>;
@@ -91,85 +92,63 @@ export default async function LaptopDetails({ params }: LaptopDetailsProps) {
           </ol>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Product Images */}
-          <div className="space-y-4">
-            <div className="aspect-w-16 aspect-h-9 bg-gray-200 rounded-lg overflow-hidden">
-              <Image
-                src={images[0]}
-                alt={laptop.modelName}
-                width={600}
-                height={400}
-                className="w-full h-96 object-cover"
-                priority
-              />
-            </div>
-            {images.length > 1 && (
-              <div className="grid grid-cols-4 gap-4">
-                {images.slice(1).map((image, index) => (
-                  <div key={index} className="aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden">
-                    <Image
-                      src={image}
-                      alt={`${laptop.modelName} ${index + 2}`}
-                      width={150}
-                      height={150}
-                      className="w-full h-full object-cover cursor-pointer hover:opacity-80 transition-opacity"
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
+        {/* Product Images & Details Row */}
+        <div className="flex flex-col sm:flex-row gap-8">
+          <div className="flex-1">
+            {/* Product Images */}
+            <ProductImageGallery images={images} alt={laptop.modelName} />
           </div>
+          <div className="flex-1">
+            {/* Product Information */}
+            <div className="space-y-6">
+              <div>
+                <div className="flex items-center space-x-2 mb-2">
+                  <span className="text-sm font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+                    {laptop.category?.name || 'Unknown Category'}
+                  </span>
+                  <div className="flex items-center space-x-1">
+                    <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    <span className="text-sm text-gray-600">{averageRating}</span>
+                    <span className="text-sm text-gray-500">({reviewsCount} reviews)</span>
+                  </div>
+                </div>
+                <h1 className="text-3xl font-bold text-gray-900 mb-4">{laptop.modelName}</h1>
+                <p className="text-gray-600 text-lg">{laptop.description}</p>
+              </div>
 
-          {/* Product Information */}
-          <div className="space-y-6">
-            <div>
-              <div className="flex items-center space-x-2 mb-2">
-                <span className="text-sm font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
-                  {laptop.category?.name || 'Unknown Category'}
-                </span>
-                <div className="flex items-center space-x-1">
-                  <svg className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                  <span className="text-sm text-gray-600">{averageRating}</span>
-                  <span className="text-sm text-gray-500">({reviewsCount} reviews)</span>
+              {/* Warranty */}
+              <div className="border-t border-b border-gray-200 py-6">
+                <div className="space-y-2">
+                  <h3 className="text-lg font-semibold text-gray-900">Warranty Information</h3>
+                  <p className="text-gray-700">{warrantyText}</p>
+                  {laptop.warranty && (
+                    <p className="text-sm text-gray-600">{laptop.warranty.coverage}</p>
+                  )}
                 </div>
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-4">{laptop.modelName}</h1>
-              <p className="text-gray-600 text-lg">{laptop.description}</p>
-            </div>
 
-            {/* Warranty */}
-            <div className="border-t border-b border-gray-200 py-6">
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-gray-900">Warranty Information</h3>
-                <p className="text-gray-700">{warrantyText}</p>
-                {laptop.warranty && (
-                  <p className="text-sm text-gray-600">{laptop.warranty.coverage}</p>
-                )}
+              {/* Variants - New Interactive Component */}
+              <LaptopVariantsClient 
+                laptopId={laptop.id} 
+                token={token}
+              />
+
+              {/* Key Features */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Key Features</h3>
+                <ul className="space-y-2">
+                  {specifications.map((spec, index) => (
+                    <li key={index} className="flex items-center space-x-2">
+                      <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-gray-700">{spec.label}: {spec.value}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-
-            {/* Variants - New Interactive Component */}
-            <LaptopVariantsClient 
-              laptopId={laptop.id} 
-              token={token}
-            />
-
-            {/* Key Features */}
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">Key Features</h3>
-              <ul className="space-y-2">
-                {specifications.map((spec, index) => (
-                  <li key={index} className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                    <span className="text-gray-700">{spec.label}: {spec.value}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
           </div>
         </div>
