@@ -45,7 +45,7 @@ export default function MobileMenu({ isMenuOpen, setIsMenuOpen, isAuthenticated 
             </Link>
             <Link
               href="/signup"
-              className="flex items-center justify-center w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+              className="flex items-center justify-center w-full px-4 py-3 bg-linear-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 rounded-lg transition-all duration-200 font-semibold shadow-md hover:shadow-lg transform hover:scale-[1.02]"
               onClick={() => setIsMenuOpen(false)}
             >
               <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

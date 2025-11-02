@@ -8,15 +8,15 @@ export default function Home() {
   const { laptops, loading, error } = useLaptops(9);
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+  <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
+  <div className="absolute inset-0 bg-linear-to-r from-blue-600/10 to-purple-600/10"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32">
           <div className="text-center">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6">
               Find Your Perfect
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+              <span className="block text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-purple-600">
                 Laptop
               </span>
             </h1>
@@ -27,7 +27,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link
                 href="/shop"
-                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                className="bg-linear-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
               >
                 Shop Now
               </Link>
@@ -61,7 +61,7 @@ export default function Home() {
           <div className="text-center mt-12">
             <Link
               href="/shop"
-              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
+              className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-lg text-white bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-300"
             >
               View All Laptops
               <svg
@@ -94,7 +94,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 hover:shadow-lg transition-all duration-300">
+            <div className="text-center p-6 rounded-xl bg-linear-to-br from-blue-50 to-blue-100 hover:shadow-lg transition-all duration-300">
               <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-8 h-8 text-white"
@@ -119,7 +119,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="text-center p-6 rounded-xl bg-gradient-to-br from-purple-50 to-purple-100 hover:shadow-lg transition-all duration-300">
+            <div className="text-center p-6 rounded-xl bg-linear-to-br from-purple-50 to-purple-100 hover:shadow-lg transition-all duration-300">
               <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-8 h-8 text-white"
@@ -143,7 +143,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="text-center p-6 rounded-xl bg-gradient-to-br from-green-50 to-green-100 hover:shadow-lg transition-all duration-300">
+            <div className="text-center p-6 rounded-xl bg-linear-to-br from-green-50 to-green-100 hover:shadow-lg transition-all duration-300">
               <div className="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg
                   className="w-8 h-8 text-white"
@@ -171,7 +171,7 @@ export default function Home() {
       </div>
 
       {/* Stats Section */}
-      <div className="py-16 bg-gradient-to-r from-blue-600 to-purple-600">
+  <div className="py-16 bg-linear-to-r from-blue-600 to-purple-600">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div className="text-white">
