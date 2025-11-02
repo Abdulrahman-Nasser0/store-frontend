@@ -3,7 +3,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useLaptops } from "@/hooks/useLaptops";
-import LaptopsGrid from "@/components/ui/laptops-grid";
+import LaptopsGrid from "@/components/products/LaptopsGrid";
 
 export default function Shop() {
   const searchParams = useSearchParams();

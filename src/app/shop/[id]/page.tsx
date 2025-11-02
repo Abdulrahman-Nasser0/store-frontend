@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getLaptopById } from '@/lib/api';
 import { getSession } from '@/lib/session';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/common/Button';
 
 interface LaptopDetailsProps {
   params: Promise<{ id: string }>;

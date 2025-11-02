@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useLaptops } from "@/hooks/useLaptops";
-import LaptopsGrid from "../components/ui/laptops-grid";
+import LaptopsGrid from "@/components/products/LaptopsGrid";
 
 export default function Home() {
   const { laptops, loading, error } = useLaptops(9);

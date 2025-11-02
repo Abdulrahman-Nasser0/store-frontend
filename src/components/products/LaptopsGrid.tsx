@@ -1,8 +1,7 @@
-import React from "react";
-import LaptopCard from "@/components/ui/laptop-card";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import ErrorDisplay from "@/components/ui/ErrorDisplay";
-import EmptyState from "@/components/ui/EmptyState";
+import LaptopCard from "@/components/products/LaptopCard";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import ErrorDisplay from "@/components/common/ErrorDisplay";
+import EmptyState from "@/components/common/EmptyState";
 import { LaptopsGridProps } from "@/lib/types";
 
 

@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getUserProfile } from "@/lib/actions";
 import { AuthStatusResponse } from "@/lib/types";
-import LoadingSpinner from "@/components/ui/LoadingSpinner";
-import ErrorDisplay from "@/components/ui/ErrorDisplay";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+import ErrorDisplay from "@/components/common/ErrorDisplay";
 
 export default function Profile() {
   const router = useRouter();

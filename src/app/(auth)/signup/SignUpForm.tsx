@@ -3,7 +3,7 @@
 import { signUp } from "@/lib/actions";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/common/Button";
 import Link from "next/link";
 
 const SignUpForm = () => {

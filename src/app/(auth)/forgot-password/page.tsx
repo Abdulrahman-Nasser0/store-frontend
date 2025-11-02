@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { forgotPasswordApi } from '../../../lib/api';
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/common/Button";
 
 export default function ForgotPassword() {
   const searchParams = useSearchParams();
@@ -84,7 +84,7 @@ export default function ForgotPassword() {
               loading={loading}
               fullWidth
               variant="primary"
-              className="uppercase tracking-wide font-semibold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              className="uppercase tracking-wide font-semibold text-sm bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
             >
               {loading ? 'Sending...' : 'Send Instructions'}
             </Button>

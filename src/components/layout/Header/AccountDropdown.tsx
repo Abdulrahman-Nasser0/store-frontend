@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { logout } from "@/lib/actions";
 import Dropdown from "./Dropdown";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/common/Button";
 
 export default function AccountDropdown() {
   const trigger = (

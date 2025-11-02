@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useSearchParams, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { confirmEmailApi, resendVerificationApi } from '../../../lib/api';
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/common/Button";
 
 export default function VerifyEmail() {
   const searchParams = useSearchParams();
