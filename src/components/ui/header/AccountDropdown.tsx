@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { logout } from "@/lib/actions";
 import Dropdown from "./Dropdown";
+import { Button } from "@/components/ui/Button";
 
 export default function AccountDropdown() {
   const trigger = (
@@ -18,9 +19,15 @@ export default function AccountDropdown() {
         <Link href="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
         <div className="border-t border-gray-100 my-1"></div>
         <form action={logout} className="px-4 py-2 hover:bg-gray-100">
-          <button type="submit" className="text-red-600 cursor-pointer hover:text-red-800 text-sm w-full text-left">
+          <Button
+            type="submit"
+            variant="danger"
+            fullWidth
+            className="text-sm text-left bg-transparent! text-red-600! hover:text-red-800! shadow-none px-0 py-0 h-auto"
+            style={{ justifyContent: 'flex-start' }}
+          >
             Sign Out
-          </button>
+          </Button>
         </form>
       </div>
     </Dropdown>

@@ -109,7 +109,7 @@ export default function VerifyEmail() {
               fullWidth
               disabled={code.length !== 6}
               variant="primary"
-              className="uppercase tracking-wide font-semibold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              className="uppercase tracking-wide font-semibold text-sm bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
             >
               {loading ? 'Verifying...' : 'Verify Email'}
             </Button>
