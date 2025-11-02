@@ -1,6 +1,6 @@
 "use server";
 import { LaptopById, PaginatedLaptopsResponse, ApiResponse, LoginRequest, RegisterRequest , LoginResponse, AuthStatusResponse  } from './types'
-
+import { USE_MOCK_DATA, getMockLaptops, getMockLaptopById } from './mock-data/config'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -243,6 +243,20 @@ export async function getLaptops({
   hasTouchScreen?: boolean;
   token?: string;
 } = {}) {
+  // Return mock data if enabled
+  if (USE_MOCK_DATA) {
+    const mockData = getMockLaptops({ page, pageSize, search, categoryId, isActive });
+    return Promise.resolve({
+      isSuccess: true,
+      message: "Laptops retrieved successfully (mock data)",
+      messageAr: "تم استرجاع البيانات بنجاح",
+      data: mockData,
+      errors: [],
+      statusCode: 200,
+      timestamp: new Date().toISOString(),
+    } as ApiResponse<PaginatedLaptopsResponse>);
+  }
+
   const params = new URLSearchParams();
   if (page !== undefined) params.append('page', page.toString());
   if (pageSize !== undefined) params.append('pageSize', pageSize.toString());
@@ -269,6 +283,32 @@ export async function getLaptops({
 }
 
 export async function getLaptopById(id: string, token?: string) {
+  // Return mock data if enabled
+  if (USE_MOCK_DATA) {
+    const mockLaptop = getMockLaptopById(id);
+    if (mockLaptop) {
+      return Promise.resolve({
+        isSuccess: true,
+        message: "Laptop retrieved successfully (mock data)",
+        messageAr: "تم استرجاع البيانات بنجاح",
+        data: mockLaptop,
+        errors: [],
+        statusCode: 200,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<LaptopById>);
+    } else {
+      return Promise.resolve({
+        isSuccess: false,
+        message: "Laptop not found",
+        messageAr: "لم يتم العثور على اللابتوب",
+        data: null as unknown as LaptopById,
+        errors: ["Laptop not found"],
+        statusCode: 404,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<LaptopById>);
+    }
+  }
+
   const headers: Record<string, string> = {};
   if (token) {
     headers.Authorization = `Bearer ${token}`;
