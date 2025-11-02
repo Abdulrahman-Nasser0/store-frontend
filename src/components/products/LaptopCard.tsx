@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { LaptopCardProps } from "@/lib/types";
+import { Button } from "@/components/common/Button";
 
 
 
@@ -47,11 +48,10 @@ export default function LaptopCard({ laptop }: LaptopCardProps) {
               </>
             )}
           </div>
-          <Link
-            href={`/shop/${laptop.id}`}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            View Details
+          <Link href={`/shop/${laptop.id}`} className="block">
+            <Button variant="primary" size="md" className="px-4 py-2 w-full sm:w-auto">
+              View Details
+            </Button>
           </Link>
         </div>
       </div>
