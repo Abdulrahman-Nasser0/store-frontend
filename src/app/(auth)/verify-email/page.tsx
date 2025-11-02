@@ -28,10 +28,10 @@ export default function VerifyEmail() {
         setMessage('Email verified successfully! Redirecting to login...');
         redirect('/login');
       } else {
-        setError(response.message || 'Verification failed');
+        setError(response.message || 'The verification code is invalid or has expired. Please request a new code.');
       }
     } catch {
-      setError('Network error. Please try again.');
+      setError('We\'re having trouble connecting to our servers. Please check your internet connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -46,12 +46,12 @@ export default function VerifyEmail() {
       const response = await resendVerificationApi(email, 0); // 0 for email verification
 
       if (response.isSuccess) {
-        setMessage('Verification code sent! Check your email.');
+        setMessage('New verification code sent! Check your email inbox and spam folder.');
       } else {
-        setError(response.message || 'Failed to resend code');
+        setError(response.message || 'We couldn\'t send a new code at the moment. Please try again in a few minutes.');
       }
     } catch {
-      setError('Network error. Please try again.');
+      setError('We\'re having trouble connecting to our servers. Please check your internet connection and try again.');
     } finally {
       setResending(false);
     }

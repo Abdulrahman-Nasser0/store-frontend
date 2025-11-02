@@ -2,10 +2,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { getUserProfile } from "@/lib/actions";
 import { AuthStatusResponse } from "@/lib/types";
+import LoadingSpinner from "@/components/ui/LoadingSpinner";
+import ErrorDisplay from "@/components/ui/ErrorDisplay";
 
 export default function Profile() {
+  const router = useRouter();
   const [userData, setUserData] = useState<AuthStatusResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,34 +36,36 @@ export default function Profile() {
   }, []);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading profile...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSpinner message="Loading your profile..." fullScreen />;
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-600 text-lg font-semibold mb-2">Error</div>
-          <p className="text-gray-600">{error}</p>
-        </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <ErrorDisplay
+          title="Unable to Load Profile"
+          message="We couldn't retrieve your profile information at this moment. This might be a temporary issue with our servers. Please try again shortly."
+          actionButton={{
+            text: "Try Again",
+            onClick: () => window.location.reload()
+          }}
+        />
       </div>
     );
   }
 
   if (!userData?.isAuthenticated) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-gray-600 text-lg">Not authenticated</div>
-          <p className="text-gray-500 mt-2">Please log in to view your profile</p>
-        </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <ErrorDisplay
+          title="Authentication Required"
+          message="You need to be logged in to view your profile. Please sign in to continue."
+          type="warning"
+          actionButton={{
+            text: "Go to Login",
+            onClick: () => router.push('/login')
+          }}
+        />
       </div>
     );
   }

@@ -23,12 +23,12 @@ export default function ForgotPassword() {
       const response = await forgotPasswordApi(email);
 
       if (response.isSuccess) {
-        setMessage('If the email exists in our system, password reset instructions will be sent! Check your email.');
+        setMessage('If the email exists in our system, password reset instructions will be sent! Check your email inbox and spam folder.');
       } else {
-        setError(response.message || 'Failed to send password reset instructions');
+        setError(response.message || 'We couldn\'t process your request at the moment. Please try again later.');
       }
     } catch {
-      setError('Network error. Please try again.');
+      setError('We\'re having trouble connecting to our servers. Please check your internet connection and try again.');
     } finally {
       setLoading(false);
     }

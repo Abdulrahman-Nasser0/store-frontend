@@ -27,11 +27,27 @@ export async function login(_prevState: any, formData: FormData): Promise<LoginS
 
   // 3. Handle API response
   if (!response.isSuccess) {
+    // Map backend errors to user-friendly messages
+    let userFriendlyMessage = response.message;
+    
+    // Handle specific backend error messages
+    if (response.message.toLowerCase().includes("application not found")) {
+      userFriendlyMessage = "Unable to connect to the authentication service. Our team is working on this. Please try again in a few moments.";
+    } else if (response.message.toLowerCase().includes("invalid") || 
+               response.message.toLowerCase().includes("incorrect")) {
+      userFriendlyMessage = "Invalid email or password. Please check your credentials and try again.";
+    } else if (response.message.toLowerCase().includes("network")) {
+      userFriendlyMessage = "Network connection issue. Please check your internet connection and try again.";
+    } else if (response.message.toLowerCase().includes("server") || 
+               response.message.toLowerCase().includes("empty response")) {
+      userFriendlyMessage = "Our servers are temporarily unavailable. Please try again in a few moments.";
+    }
+    
     return {
       errors: {
-        email: response.errors || [response.message],
+        email: [userFriendlyMessage],
       },
-      message: response.message,
+      message: userFriendlyMessage,
     };
   }
 
@@ -39,7 +55,7 @@ export async function login(_prevState: any, formData: FormData): Promise<LoginS
   if (!response.data || !response.data.token) {
     return {
       errors: {
-        email: ["Invalid response from server"],
+        email: ["We encountered an issue while logging you in. Please try again."],
       },
       message: "Login failed",
     };
@@ -118,9 +134,20 @@ export async function signUp(_prevState: any, formData: FormData): Promise<SignU
       });
     }
 
-    // General error on email field
+    // Handle "Application not found" and other server errors
+    let userFriendlyMessage = response.message;
+    if (response.message.toLowerCase().includes("application not found")) {
+      userFriendlyMessage = "Unable to connect to the registration service. Our team is working on this. Please try again in a few moments.";
+    } else if (response.message.toLowerCase().includes("server") || 
+               response.message.toLowerCase().includes("empty response")) {
+      userFriendlyMessage = "Our servers are temporarily unavailable. Please try again in a few moments.";
+    } else if (response.message.toLowerCase().includes("network")) {
+      userFriendlyMessage = "Network connection issue. Please check your internet connection and try again.";
+    }
+
+    // General error on email field if no specific field errors
     if (Object.keys(fieldErrors).length === 0) {
-      fieldErrors.email = [response.message];
+      fieldErrors.email = [userFriendlyMessage];
     }
 
     return {
@@ -171,7 +198,7 @@ export async function getUserProfile() {
 
       return {
         isSuccess: false,
-        message: "No authentication token found",
+        message: "Your session has expired. Please log in again.",
         data: null,
       };
     }
@@ -183,7 +210,7 @@ export async function getUserProfile() {
 
     return {
       isSuccess: false,
-      message: "Failed to fetch user profile",
+      message: "We couldn't load your profile. Please try again.",
       data: null,
     };
   }

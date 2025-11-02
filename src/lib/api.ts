@@ -32,7 +32,7 @@ async function apiCall<T>(
     if (!responseText || responseText.trim() === '') {
       return {
         isSuccess: false,
-        message: `Server returned empty response (Status: ${response.status})`,
+        message: `Our servers are temporarily unavailable. Please try again in a few moments.`,
         messageAr: "الخادم أرجع استجابة فارغة",
         data: null as T,
         errors: [`HTTP ${response.status}: Empty response body`],
@@ -50,7 +50,7 @@ async function apiCall<T>(
       console.error('Invalid JSON:', responseText);
       return {
         isSuccess: false,
-        message: "Invalid JSON response from server",
+        message: "We're experiencing technical difficulties. Please try again later.",
         messageAr: "استجابة JSON غير صالحة من الخادم",
         data: null as T,
         errors: [`Invalid JSON: ${responseText.substring(0, 100)}...`],
@@ -94,7 +94,7 @@ async function apiCall<T>(
     // Return error in backend format
     return {
       isSuccess: false,
-      message: error instanceof Error ? error.message : "Network error occurred",
+      message: error instanceof Error ? error.message : "Unable to connect to our servers. Please check your internet connection and try again.",
       messageAr: "حدث خطأ في الشبكة",
       data: null as T,
       errors: [error instanceof Error ? error.message : "Unknown error"],

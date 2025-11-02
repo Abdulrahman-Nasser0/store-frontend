@@ -40,12 +40,12 @@ export function useLaptops(pageSize = 9, search?: string, category?: string) {
           setError(null);
         } else {
           setLaptops([]);
-          setError(laptopsResponse.message || "Failed to fetch laptops");
+          setError(laptopsResponse.message || "Unable to load products");
         }
       } catch {
         if (!isMounted) return;
         setLaptops([]);
-        setError("An error occurred while fetching laptops");
+        setError("Unable to connect to our servers");
       } finally {
         if (isMounted) setLoading(false);
       }

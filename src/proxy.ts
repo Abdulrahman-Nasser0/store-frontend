@@ -5,7 +5,7 @@ import { decrypt } from "./lib/session";
 const protectedRoutes = ["/dashboard", "/profile"];
 const publicRoutes = ["/login", "/signup" , "/shop", "/cart", "/", "/forgot-password", "/verify-email"];
 
-export default async function middleware(req: NextRequest) {
+export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
   const isPublicRoute = publicRoutes.includes(path);
@@ -27,19 +27,19 @@ export default async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-//Run middleware on all routes except for these paths (for performance)
+//Run Proxy on all routes except for these paths (for performance)
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };
 
 /*
-    ✅ Middleware RUNS on:
+    ✅ Proxy RUNS on:
     - /
     - /login
     - /signup  
     - /dashboard
 
-    ❌ Middleware SKIPS:
+    ❌ Proxy SKIPS:
     - /api/users
     - /_next/static/css/app.css
     - /_next/image/photo.jpg
