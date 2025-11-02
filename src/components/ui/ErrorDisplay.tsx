@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from './Button';
 
 interface ErrorDisplayProps {
   title?: string;
@@ -80,12 +81,13 @@ export default function ErrorDisplay({
             {message}
           </p>
           {actionButton && (
-            <button
+            <Button
               onClick={actionButton.onClick}
-              className={`mt-4 ${colorScheme.buttonBg} text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200`}
+              className={`mt-4 ${colorScheme.buttonBg} text-white px-4 py-2 rounded-md text-sm font-medium`}
+              style={{ minWidth: 120 }}
             >
               {actionButton.text}
-            </button>
+            </Button>
           )}
         </div>
       </div>

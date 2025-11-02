@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { forgotPasswordApi } from '../../../lib/api';
+import { Button } from "@/components/ui/Button";
 
 export default function ForgotPassword() {
   const searchParams = useSearchParams();
@@ -78,13 +79,15 @@ export default function ForgotPassword() {
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
-              disabled={loading}
-              className="w-full bg-linear-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold text-sm uppercase tracking-wide"
+              loading={loading}
+              fullWidth
+              variant="primary"
+              className="uppercase tracking-wide font-semibold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
             >
               {loading ? 'Sending...' : 'Send Instructions'}
-            </button>
+            </Button>
           </form>
 
           <div className="mt-6 text-center">

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getLaptopById } from '@/lib/api';
 import { getSession } from '@/lib/session';
+import { Button } from '@/components/ui/Button';
 
 interface LaptopDetailsProps {
   params: Promise<{ id: string }>;
@@ -143,10 +144,14 @@ export default async function LaptopDetails({ params }: LaptopDetailsProps) {
 
             {/* Action Buttons */}
             <div className="flex space-x-4">
-              <button className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+              <Button
+                type="button"
+                variant="primary"
+                fullWidth
+                className="font-medium"
+              >
                 Add to Cart
-              </button>
-              
+              </Button>
             </div>
 
             {/* Key Features */}

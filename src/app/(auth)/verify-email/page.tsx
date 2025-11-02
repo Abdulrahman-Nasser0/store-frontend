@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useSearchParams, redirect } from 'next/navigation';
 import Link from 'next/link';
 import { confirmEmailApi, resendVerificationApi } from '../../../lib/api';
+import { Button } from "@/components/ui/Button";
 
 export default function VerifyEmail() {
   const searchParams = useSearchParams();
@@ -102,23 +103,28 @@ export default function VerifyEmail() {
               </div>
             )}
 
-            <button
+            <Button
               type="submit"
-              disabled={loading || code.length !== 6}
-              className="w-full bg-linear-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-semibold text-sm uppercase tracking-wide"
+              loading={loading}
+              fullWidth
+              disabled={code.length !== 6}
+              variant="primary"
+              className="uppercase tracking-wide font-semibold text-sm bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
             >
               {loading ? 'Verifying...' : 'Verify Email'}
-            </button>
+            </Button>
           </form>
 
           <div className="mt-6 text-center space-y-4">
-            <button
+            <Button
+              type="button"
               onClick={handleResend}
-              disabled={resending}
-              className="text-sm text-purple-600 hover:text-purple-500 font-medium disabled:opacity-50"
+              loading={resending}
+              variant="ghost"
+              className="text-sm text-purple-600 hover:text-purple-500 font-medium"
             >
               {resending ? 'Sending...' : "Didn't receive the code? Resend"}
-            </button>
+            </Button>
 
             <div className="pt-4 border-t border-gray-200">
               <Link href="/login" className="text-sm text-gray-600 hover:text-gray-900">
