@@ -1,24 +1,19 @@
 import Link from "next/link";
 import AccountDropdown from "./AccountDropdown";
 import CartIcon from "./CartIcon";
+import { UserActionsProps } from "@/lib/types";
 
-interface UserActionsProps {
-  isAuthenticated?: boolean;
-}
 
 export default function UserActions({ isAuthenticated = false }: UserActionsProps) {
   return (
     <div className="flex items-center">
-      {isAuthenticated ? (
         <div className="flex items-center space-x-4">
           {/* Cart */}
           <CartIcon itemCount={0} />
 
           {/* Account Dropdown */}
-          <AccountDropdown />
+          <AccountDropdown isAuthenticated={isAuthenticated} />
         </div>
-      ) : (
-        // Sign In / Sign Up
         <div className="hidden md:flex items-center space-x-2">
           <Link href="/login" className="text-gray-700 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200">
             Sign In
@@ -27,7 +22,7 @@ export default function UserActions({ isAuthenticated = false }: UserActionsProp
             Sign Up
           </Link>
         </div>
-      )}
+      
     </div>
   );
 }

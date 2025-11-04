@@ -25,6 +25,10 @@ export interface Brand {
   logoUrl: string;
 }
 
+export interface UserActionsProps {
+  isAuthenticated?: boolean;
+}
+
 // Category interface
 export interface Category {
   id: number;

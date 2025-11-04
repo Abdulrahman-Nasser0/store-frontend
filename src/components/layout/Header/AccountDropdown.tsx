@@ -3,7 +3,7 @@ import { logout } from "@/lib/actions";
 import Dropdown from "./Dropdown";
 import { Button } from "@/components/common/Button";
 
-export default function AccountDropdown() {
+export default function AccountDropdown({isAuthenticated = false } : boolean) {
   const trigger = (
     <>
       <svg className="w-6 h-6 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -18,7 +18,7 @@ export default function AccountDropdown() {
         <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</Link>
         <Link href="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
         <div className="border-t border-gray-100 my-1"></div>
-        <form action={logout} className="px-4 py-2 hover:bg-gray-100">
+        {isAuthenticated ? (<form action={logout} className="px-4 py-2 hover:bg-gray-100">
           <Button
             type="submit"
             variant="danger"
@@ -28,7 +28,7 @@ export default function AccountDropdown() {
           >
             Sign Out
           </Button>
-        </form>
+        </form>) : (null)}
       </div>
     </Dropdown>
   );
