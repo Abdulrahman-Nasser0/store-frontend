@@ -114,12 +114,12 @@ export default function Cart() {
             {cart.items.map((item) => (
               <div
                 key={item.id}
-                className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow"
               >
-                <div className="flex gap-6">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
                   {/* Product Image */}
                   <div className="shrink-0">
-                    <div className="w-24 h-24 relative rounded-lg overflow-hidden bg-gray-100">
+                    <div className="w-full sm:w-24 h-32 sm:h-24 relative rounded-lg overflow-hidden bg-gray-100">
                       <Image
                         src={item.image || '/fallback.jpeg'}
                         alt={item.productName}
@@ -131,65 +131,81 @@ export default function Cart() {
 
                   {/* Product Details */}
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1 truncate">
-                      {item.productName}
-                    </h3>
-                    <p className="text-sm text-gray-500 mb-2">SKU: {item.sku}</p>
+                    <div className="flex justify-between items-start gap-2 mb-2">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
+                          {item.productName}
+                        </h3>
+                        <p className="text-xs sm:text-sm text-gray-500 mb-2">SKU: {item.sku}</p>
+                      </div>
+                      {/* Item Total - Desktop */}
+                      <div className="hidden sm:block text-right">
+                        <p className="text-lg font-bold text-gray-900">
+                          {formatPrice(item.totalPrice)}
+                        </p>
+                      </div>
+                    </div>
                     
                     {/* Price */}
                     <div className="flex items-center gap-2 mb-4">
-                      <span className="text-xl font-bold text-blue-600">
+                      <span className="text-lg sm:text-xl font-bold text-blue-600">
                         {formatPrice(item.unitPrice)}
                       </span>
                       {item.discountAmount > 0 && (
-                        <span className="text-sm text-green-600 font-medium">
+                        <span className="text-xs sm:text-sm text-green-600 font-medium">
                           ({formatPrice(item.discountAmount)} off)
                         </span>
                       )}
                     </div>
 
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center border border-gray-300 rounded-lg">
+                    {/* Quantity Controls and Actions */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                      <div className="flex items-center border border-gray-400 rounded-lg w-fit">
                         <button
                           onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
                           disabled={item.quantity <= 1}
-                          className="px-3 py-1 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          className="px-3 py-2 text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold text-lg"
                         >
                           −
                         </button>
-                        <span className="px-4 py-1 border-x border-gray-300 font-medium">
+                        <span className="px-4 py-2 border-x border-gray-400 font-semibold text-gray-900">
                           {item.quantity}
                         </span>
                         <button
                           onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                           disabled={item.quantity >= item.stockAvailable}
-                          className="px-3 py-1 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          className="px-3 py-2 text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-bold text-lg"
                         >
                           +
                         </button>
                       </div>
 
                       {/* Stock Info */}
-                      <span className="text-sm text-gray-600">
+                      <span className="text-xs sm:text-sm text-gray-700 font-medium">
                         {item.stockAvailable} available
                       </span>
 
                       {/* Remove Button */}
-                      <button
-                        onClick={() => handleRemoveItem(item.id)}
-                        className="ml-auto text-red-600 hover:text-red-700 font-medium text-sm transition-colors"
-                      >
-                        Remove
-                      </button>
+                      <div className="sm:ml-auto">
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleRemoveItem(item.id)}
+                        >
+                          Remove
+                        </Button>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Item Total */}
-                  <div className="text-right">
-                    <p className="text-lg font-bold text-gray-900">
-                      {formatPrice(item.totalPrice)}
-                    </p>
+                    {/* Item Total - Mobile */}
+                    <div className="sm:hidden mt-4 pt-4 border-t border-gray-200">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium text-gray-600">Item Total:</span>
+                        <span className="text-lg font-bold text-gray-900">
+                          {formatPrice(item.totalPrice)}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
