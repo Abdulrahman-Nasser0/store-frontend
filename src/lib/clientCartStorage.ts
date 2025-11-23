@@ -62,12 +62,27 @@ export function addClientCartItem(
 ): AddToCartResponse {
   const items = getStoredCart();
   
+  // Validate quantity
+  if (quantity <= 0) {
+    throw new Error('Quantity must be greater than 0');
+  }
+  
+  if (quantity > stockAvailable) {
+    throw new Error(`Only ${stockAvailable} items available in stock`);
+  }
+  
   // Check if item already exists
   const existingItem = items.find(item => item.productId === productId);
   
   if (existingItem) {
+    // Validate total quantity doesn't exceed stock
+    const newQuantity = existingItem.quantity + quantity;
+    if (newQuantity > stockAvailable) {
+      throw new Error(`Cannot add ${quantity} more. Only ${stockAvailable - existingItem.quantity} items available`);
+    }
+    
     // Update quantity
-    existingItem.quantity += quantity;
+    existingItem.quantity = newQuantity;
     existingItem.totalPrice = existingItem.unitPrice * existingItem.quantity;
     saveCart(items);
     
@@ -135,6 +150,11 @@ export function updateClientCartItem(itemId: number, quantity: number): void {
   
   if (!item) {
     throw new Error('Cart item not found');
+  }
+  
+  // Validate quantity doesn't exceed available stock
+  if (quantity > item.stockAvailable) {
+    throw new Error(`Only ${item.stockAvailable} items available in stock`);
   }
   
   item.quantity = quantity;

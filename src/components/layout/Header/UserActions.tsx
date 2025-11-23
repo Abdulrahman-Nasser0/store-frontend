@@ -8,13 +8,16 @@ import { Button } from "@/components/common/Button";
 export default function UserActions({ isAuthenticated = false }: UserActionsProps) {
   return (
     <div className="flex items-center">
-        <div className="flex items-center ">
-          {/* Cart */}
-          <CartIconClient />
+      <div className="flex items-center">
+        {/* Cart */}
+        <CartIconClient />
 
-          {/* Account Dropdown */}
-          <AccountDropdown isAuthenticated={isAuthenticated} />
-        </div>
+        {/* Account Dropdown */}
+        <AccountDropdown isAuthenticated={isAuthenticated} />
+      </div>
+      
+      {/* Only show Sign In/Sign Up when NOT authenticated */}
+      {!isAuthenticated && (
         <div className="hidden md:flex items-center space-x-2">
           <Link href="/login">
             <Button variant="ghost" size="sm">
@@ -27,7 +30,7 @@ export default function UserActions({ isAuthenticated = false }: UserActionsProp
             </Button>
           </Link>
         </div>
-      
+      )}
     </div>
   );
 }
