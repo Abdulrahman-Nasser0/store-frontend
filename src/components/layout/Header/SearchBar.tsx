@@ -52,30 +52,22 @@ export default function SearchBar({ isMobile = false, placeholder = "Search lapt
   }
 
   return (
-    <div className="flex-1 max-w-lg mx-8 hidden md:block">
-      <form onSubmit={handleSearch} className={`relative ${isSearchFocused ? 'ring-2 ring-blue-500 rounded-lg' : ''}`}>
+    <div className="w-full">
+      <form onSubmit={handleSearch} className="relative group">
+        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+          <svg className="h-5 w-5 text-gray-400 group-focus-within:text-blue-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={placeholder}
-          className="w-full pl-4 pr-12 py-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 transition-colors duration-200"
+          className="w-full pl-10 pr-4 py-2.5 text-black bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all duration-200"
           onFocus={() => setIsSearchFocused(true)}
           onBlur={() => setIsSearchFocused(false)}
         />
-        <svg
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          className="absolute right-3 top-2.5 h-5 w-5 text-gray-400 hover:text-gray-600 transition-colors duration-200 cursor-pointer"
-          onClick={() => {
-            if (searchQuery.trim()) {
-              handleSearch({ preventDefault: () => {} } as React.FormEvent);
-            }
-          }}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
       </form>
     </div>
   );

@@ -42,14 +42,14 @@ export default function LaptopCard({ laptop }: LaptopCardProps) {
               <span className="text-2xl font-bold text-blue-600">${laptop.priceRange.min.toFixed(2)}</span>
             ) : (
               <>
-                <span className="text-lg font-bold text-blue-600">
+                <span className="text-sm font-bold text-blue-600 whitespace-nowrap">
                   ${laptop.priceRange.min.toFixed(2)} - ${laptop.priceRange.max.toFixed(2)}
                 </span>
               </>
             )}
           </div>
           <Link href={`/shop/${laptop.id}`} className="block">
-            <Button variant="primary" size="md" className="px-4 py-2 w-full sm:w-auto">
+            <Button variant="primary" size="sm" className="px-4 py-2 w-full sm:w-auto">
               View Details
             </Button>
           </Link>

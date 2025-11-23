@@ -20,22 +20,31 @@ export default function Header({ isAuthenticated = false }: HeaderProps) {
     <>
       <PromotionalBanner />
 
-      <nav className="bg-white shadow-sm border-b sticky top-0 z-50">
+      <nav className="bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 gap-2">
-            <Logo />
+          <div className="flex justify-between items-center h-20">
+            {/* Left: Logo */}
+            <div className="flex items-center shrink-0">
+              <Logo />
+            </div>
 
-            <DesktopNavigation />
+            {/* Center: Navigation & Search */}
+            <div className="hidden lg:flex items-center flex-1 justify-center gap-8 max-w-2xl">
+              <DesktopNavigation />
+              <div className="flex-1 max-w-md">
+                <SearchBar />
+              </div>
+            </div>
 
-            <SearchBar />
-
-            <div className="flex items-center gap-2">
+            {/* Right: User Actions */}
+            <div className="flex items-center gap-3">
               <UserActions isAuthenticated={isAuthenticated} />
 
               {/* Mobile Menu Button */}
               <button
                 onClick={toggleMenu}
-                className="md:hidden cursor-pointer text-gray-700 hover:text-gray-900"
+                className="lg:hidden p-2 rounded-lg text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
+                aria-label="Toggle menu"
               >
                 <svg
                   className="w-6 h-6"

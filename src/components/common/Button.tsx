@@ -22,29 +22,29 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const baseStyles =
-  "inline-flex items-center justify-center font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer";
+  "group relative inline-flex items-center justify-center font-semibold rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer transform hover:scale-105";
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
+    "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 focus:ring-blue-500 shadow-lg hover:shadow-xl hover:shadow-blue-500/50",
   secondary:
-    "bg-white text-blue-600 border border-blue-600 hover:bg-blue-50 focus:ring-blue-500",
+    "text-white border-2 border-blue-400/30 hover:border-blue-400 backdrop-blur-sm bg-white/5 hover:bg-white/10 focus:ring-blue-500",
   danger:
-    "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
+    "bg-gradient-to-r from-red-600 to-rose-600 text-white hover:from-red-700 hover:to-rose-700 focus:ring-red-500 shadow-lg hover:shadow-xl hover:shadow-red-500/50",
   outline:
-    "bg-transparent border border-gray-300 text-gray-800 hover:bg-gray-50 focus:ring-blue-500",
+    "bg-transparent border-2 border-gray-300 text-gray-800 hover:border-blue-500 hover:text-blue-600 focus:ring-blue-500 shadow-sm hover:shadow-md",
   ghost:
     "bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-blue-500",
   success:
-    "bg-green-600 text-white hover:bg-green-700 focus:ring-green-500",
+    "bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700 focus:ring-green-500 shadow-lg hover:shadow-xl hover:shadow-green-500/50",
   warning:
-    "bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-400",
+    "bg-gradient-to-r from-yellow-500 to-amber-500 text-white hover:from-yellow-600 hover:to-amber-600 focus:ring-yellow-400 shadow-lg hover:shadow-xl hover:shadow-yellow-500/50",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
-  sm: "px-3 py-2 text-sm",
-  md: "px-5 py-2.5 text-base",
-  lg: "px-8 py-3.5 text-lg",
+  sm: "px-4 py-2 text-sm",
+  md: "px-6 py-3 text-base",
+  lg: "px-8 py-4 text-lg",
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

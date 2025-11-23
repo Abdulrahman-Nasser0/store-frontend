@@ -22,12 +22,9 @@ export default function DesktopNavigation() {
   ];
 
   return (
-    <div className="hidden md:flex items-center space-x-8">
-
+    <div className="hidden lg:flex items-center gap-1">
       <Dropdown trigger="Shop" items={shopItems} />
-
       <Dropdown trigger="Brands" items={brandItems} />
-
     </div>
   );
 }

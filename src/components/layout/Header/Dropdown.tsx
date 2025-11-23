@@ -40,28 +40,28 @@ export default function Dropdown({ trigger, items, children, align = "left" }: D
     <div className="relative group" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="text-gray-700 hover:text-gray-900 flex items-center space-x-1 transition-colors duration-200"
+        className="px-3 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg flex items-center gap-1 transition-all duration-200 font-medium text-sm"
       >
         {trigger}
-        <svg className="w-4 h-4 pl-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
         </svg>
       </button>
-      <div className={`absolute top-full ${align === "right" ? "right-0" : "left-0"} mt-2 w-48 bg-white rounded-md shadow-lg transition-all duration-200 z-50 ${
-        isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
-      } group-hover:opacity-100 group-hover:visible`}>
+      <div className={`absolute top-full ${align === "right" ? "right-0" : "left-0"} mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 transition-all duration-200 z-50 ${
+        isOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
+      } group-hover:opacity-100 group-hover:visible group-hover:translate-y-0`}>
         {children ? (
           children
         ) : (
-          <div className="py-1">
+          <div className="py-2">
             {items?.map((item, index) => (
               <Link
                 key={index}
                 href={item.href}
-                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
+                className="flex items-center px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 first:rounded-t-xl last:rounded-b-xl"
                 onClick={() => setIsOpen(false)}
               >
-                {item.icon && <span className="mr-2">{item.icon}</span>}
+                {item.icon && <span className="mr-3">{item.icon}</span>}
                 {item.label}
               </Link>
             ))}

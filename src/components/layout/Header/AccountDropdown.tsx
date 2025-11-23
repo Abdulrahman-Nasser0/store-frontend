@@ -2,33 +2,49 @@ import Link from "next/link";
 import { logout } from "@/lib/actions";
 import Dropdown from "./Dropdown";
 import { Button } from "@/components/common/Button";
+import { UserActionsProps } from "@/lib/types";
 
-export default function AccountDropdown({isAuthenticated = false } : boolean) {
+export default function AccountDropdown({isAuthenticated = false } : UserActionsProps) {
   const trigger = (
-    <>
-      <svg className="w-6 h-6 -mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div className=" text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200">
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
       </svg>
-    </>
+    </div>
   );
 
   return (
     <Dropdown trigger={trigger} align="right">
-      <div className="py-1">
-        <Link href="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">My Profile</Link>
-        <Link href="/" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</Link>
-        <div className="border-t border-gray-100 my-1"></div>
-        {isAuthenticated ? (<form action={logout} className="px-4 py-2 hover:bg-gray-100">
-          <Button
-            type="submit"
-            variant="danger"
-            fullWidth
-            className="text-sm text-left bg-transparent! text-red-600! hover:text-red-800! shadow-none px-0 py-0 h-auto"
-            style={{ justifyContent: 'flex-start' }}
-          >
-            Sign Out
-          </Button>
-        </form>) : (null)}
+      <div className="py-2">
+        <Link href="/profile" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+          My Profile
+        </Link>
+        <Link href="/" className="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Settings
+        </Link>
+        {isAuthenticated && (
+          <>
+            <div className="border-t border-gray-100 my-1"></div>
+            <form action={logout} className="px-4 py-2 hover:bg-red-50 transition-all duration-200">
+              <button
+                type="submit"
+                className="flex items-center gap-3 text-sm text-red-600 hover:text-red-700 w-full text-left"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Sign Out
+              </button>
+            </form>
+          </>
+        )}
       </div>
     </Dropdown>
   );

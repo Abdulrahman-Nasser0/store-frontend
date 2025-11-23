@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Button } from "@/components/common/Button";
 
 export default function NotFound() {
   return (
@@ -17,17 +18,15 @@ export default function NotFound() {
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
-          >
-            Go to Homepage
+          <Link href="/">
+            <Button variant="primary" size="md">
+              Go to Homepage
+            </Button>
           </Link>
-          <Link
-            href="/shop"
-            className="bg-white text-blue-600 border-2 border-blue-600 px-6 py-3 rounded-lg hover:bg-blue-50 transition-colors font-medium"
-          >
-            Browse Products
+          <Link href="/shop">
+            <Button variant="secondary" size="md">
+              Browse Products
+            </Button>
           </Link>
         </div>
       </div>
