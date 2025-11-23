@@ -1253,12 +1253,31 @@ formatRAM(ram: number): string
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/)
 
 ### Related Projects
-- Backend API repository: [TBD]
-- Design system: [TBD]
+- Backend API repository: [TechZone Backend](https://github.com/3bdalrhmanS3d/TechZone) (C# .NET)
+- Flutter Mobile App: Coming soon
 
 ---
 
-## 👥 Contributing
+## 👥 Team
+
+### Frontend Team
+- **Frontend Developer:** Abdulrahman Nasser - [@Abdulrahman-Nasser0](https://github.com/Abdulrahman-Nasser0)
+  - Next.js / React development
+  - UI/UX implementation
+  - State management & API integration
+
+### Backend Team
+- **Backend Developers:** .NET team
+  - Repository: [TechZone Backend](https://github.com/3bdalrhmanS3d/TechZone)
+  - RESTful API development
+
+### Mobile Team
+- **Flutter Developers:** Flutter team
+  - Cross-platform mobile app development
+
+---
+
+## 🤝 Contributing
 
 ### Development Workflow
 
@@ -1307,9 +1326,10 @@ This project is private and proprietary.
 
 ## 📧 Contact
 
-**Developer:** Abdulrahman Nasser
-**GitHub:** [@Abdulrahman-Nasser0](https://github.com/Abdulrahman-Nasser0)
-**Repository:** [store-frontend](https://github.com/Abdulrahman-Nasser0/store-frontend)
+**Frontend Developer:** Abdulrahman Nasser  
+**GitHub:** [@Abdulrahman-Nasser0](https://github.com/Abdulrahman-Nasser0)  
+**Frontend Repository:** [store-frontend](https://github.com/Abdulrahman-Nasser0/store-frontend)  
+**Backend Repository:** [TechZone Backend](https://github.com/3bdalrhmanS3d/TechZone)
 
 ---
 
