@@ -273,3 +273,81 @@ export interface LaptopsGridProps {
   loading: boolean;
   error: string | null;
 }
+
+// ==========================================
+// CART TYPES
+// ==========================================
+
+export interface CartItem {
+  id: number;
+  productType: string;
+  productId: number;
+  productName: string;
+  sku: string;
+  quantity: number;
+  unitPrice: number;
+  discountAmount: number;
+  totalPrice: number;
+  stockAvailable: number;
+  image: string;
+  addedAt: string;
+}
+
+export interface CartSummary {
+  totalItems: number;
+  subtotal: number;
+  discount: number;
+  tax: number;
+  shipping: number;
+  total: number;
+  appliedDiscountCode: string | null;
+}
+
+export interface CartData {
+  items: CartItem[];
+  totalItems: number;
+  subtotal: number;
+  discount: number;
+  tax: number;
+  shipping: number;
+  total: number;
+  appliedDiscountCode: string | null;
+}
+
+export interface AddToCartRequest {
+  productType: string;
+  productId: number;
+  quantity: number;
+}
+
+export interface AddToCartResponse {
+  id: number;
+  productType: string;
+  productId: number;
+  productName: string;
+  quantity: number;
+  unitPrice: number;
+  totalPrice: number;
+  addedAt: string;
+  cartSummary: {
+    totalItems: number;
+    total: number;
+  };
+}
+
+export interface UpdateCartItemRequest {
+  quantity: number;
+}
+
+export interface RemoveCartItemResponse {
+  removedItemId: number;
+  cartSummary: {
+    totalItems: number;
+    total: number;
+  };
+}
+
+export interface ClearCartResponse {
+  itemsRemoved: number;
+  clearedAt: string;
+}

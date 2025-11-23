@@ -215,3 +215,11 @@ export async function getUserProfile() {
     };
   }
 }
+
+// ==========================================
+// GET SESSION TOKEN (for client-side use)
+// ==========================================
+export async function getSessionToken() {
+  const session = await getSession();
+  return session?.token || null;
+}

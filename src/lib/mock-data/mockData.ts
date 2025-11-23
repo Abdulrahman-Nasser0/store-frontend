@@ -570,3 +570,163 @@ export function getMockLaptopById(id: string): LaptopById | null {
     }
   };
 }
+
+// ==========================================
+// CART MOCK DATA
+// ==========================================
+
+import type { CartData, CartItem, AddToCartResponse } from '../types';
+
+// In-memory cart storage for mock mode
+let mockCartItems: CartItem[] = [];
+let nextCartItemId = 1;
+
+export function getMockCart(): CartData {
+  const subtotal = mockCartItems.reduce((sum, item) => sum + item.totalPrice, 0);
+  const discount = mockCartItems.reduce((sum, item) => sum + item.discountAmount * item.quantity, 0);
+  const tax = 0;
+  const shipping = 0;
+  const total = subtotal - discount + tax + shipping;
+
+  return {
+    items: mockCartItems,
+    totalItems: mockCartItems.reduce((sum, item) => sum + item.quantity, 0),
+    subtotal,
+    discount,
+    tax,
+    shipping,
+    total,
+    appliedDiscountCode: null
+  };
+}
+
+export function addMockCartItem(productType: string, productId: number, quantity: number): AddToCartResponse {
+  // Find the product (currently only supporting LaptopVariant)
+  if (productType === 'LaptopVariant') {
+    // Find the variant across all laptops
+    let foundVariant: LaptopVariantDetailed | null = null;
+    let foundLaptop: Laptop | null = null;
+
+    for (const laptop of mockLaptops) {
+      const variantsResponse = getMockLaptopVariants(laptop.id, 1, 100);
+      const variant = variantsResponse.variants.items.find((v: LaptopVariantDetailed) => v.id === productId);
+      if (variant) {
+        foundVariant = variant;
+        foundLaptop = laptop;
+        break;
+      }
+    }
+
+    if (!foundVariant || !foundLaptop) {
+      throw new Error('Product not found');
+    }
+
+    // Check if item already exists in cart
+    const existingItem = mockCartItems.find(
+      item => item.productType === productType && item.productId === productId
+    );
+
+    if (existingItem) {
+      // Update quantity
+      existingItem.quantity += quantity;
+      existingItem.totalPrice = existingItem.unitPrice * existingItem.quantity;
+
+      const cartSummary = getMockCart();
+      return {
+        id: existingItem.id,
+        productType: existingItem.productType,
+        productId: existingItem.productId,
+        productName: existingItem.productName,
+        quantity: existingItem.quantity,
+        unitPrice: existingItem.unitPrice,
+        totalPrice: existingItem.totalPrice,
+        addedAt: existingItem.addedAt,
+        cartSummary: {
+          totalItems: cartSummary.totalItems,
+          total: cartSummary.total
+        }
+      };
+    }
+
+    // Create new cart item
+    const newItem: CartItem = {
+      id: nextCartItemId++,
+      productType,
+      productId,
+      productName: `${foundLaptop.modelName} - ${foundVariant.ram}GB RAM, ${foundVariant.storage}GB ${foundVariant.storageType}`,
+      sku: foundVariant.sku,
+      quantity,
+      unitPrice: foundVariant.currentPrice,
+      discountAmount: foundVariant.discountAmount || 0,
+      totalPrice: foundVariant.currentPrice * quantity,
+      stockAvailable: foundVariant.availableQuantity,
+      image: foundLaptop.mainImage || '/fallback.jpeg',
+      addedAt: new Date().toISOString()
+    };
+
+    mockCartItems.push(newItem);
+
+    const cartSummary = getMockCart();
+    return {
+      id: newItem.id,
+      productType: newItem.productType,
+      productId: newItem.productId,
+      productName: newItem.productName,
+      quantity: newItem.quantity,
+      unitPrice: newItem.unitPrice,
+      totalPrice: newItem.totalPrice,
+      addedAt: newItem.addedAt,
+      cartSummary: {
+        totalItems: cartSummary.totalItems,
+        total: cartSummary.total
+      }
+    };
+  }
+
+  throw new Error('Unsupported product type');
+}
+
+export function updateMockCartItem(itemId: number, quantity: number): CartItem {
+  const item = mockCartItems.find(i => i.id === itemId);
+  if (!item) {
+    throw new Error('Cart item not found');
+  }
+
+  if (quantity <= 0) {
+    throw new Error('Quantity must be greater than 0');
+  }
+
+  item.quantity = quantity;
+  item.totalPrice = item.unitPrice * quantity;
+
+  return item;
+}
+
+export function removeMockCartItem(itemId: number): { removedItemId: number; cartSummary: { totalItems: number; total: number } } {
+  const index = mockCartItems.findIndex(i => i.id === itemId);
+  if (index === -1) {
+    throw new Error('Cart item not found');
+  }
+
+  mockCartItems.splice(index, 1);
+
+  const cartSummary = getMockCart();
+  return {
+    removedItemId: itemId,
+    cartSummary: {
+      totalItems: cartSummary.totalItems,
+      total: cartSummary.total
+    }
+  };
+}
+
+export function clearMockCart(): { itemsRemoved: number; clearedAt: string } {
+  const itemsRemoved = mockCartItems.length;
+  mockCartItems = [];
+  nextCartItemId = 1;
+
+  return {
+    itemsRemoved,
+    clearedAt: new Date().toISOString()
+  };
+}

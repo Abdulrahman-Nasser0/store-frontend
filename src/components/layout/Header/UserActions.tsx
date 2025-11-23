@@ -1,6 +1,6 @@
 import Link from "next/link";
 import AccountDropdown from "./AccountDropdown";
-import CartIcon from "./CartIcon";
+import CartIconClient from "./CartIconClient";
 import { UserActionsProps } from "@/lib/types";
 import { Button } from "@/components/common/Button";
 
@@ -10,7 +10,7 @@ export default function UserActions({ isAuthenticated = false }: UserActionsProp
     <div className="flex items-center">
         <div className="flex items-center ">
           {/* Cart */}
-          <CartIcon itemCount={0} />
+          <CartIconClient />
 
           {/* Account Dropdown */}
           <AccountDropdown isAuthenticated={isAuthenticated} />

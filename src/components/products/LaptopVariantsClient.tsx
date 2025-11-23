@@ -2,6 +2,7 @@
 
 import  { useState, useEffect } from 'react';
 import { useVariants } from '@/hooks/useVariants';
+import { useCart } from '@/hooks/useCart';
 import VariantSelector from '@/components/products/VariantSelector';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ErrorDisplay from '@/components/common/ErrorDisplay';
@@ -18,7 +19,11 @@ export default function LaptopVariantsClient({ laptopId, token }: LaptopVariants
     token
   });
 
+  const { addItem } = useCart();
+
   const [selectedVariant, setSelectedVariant] = useState<LaptopVariantDetailed | null>(null);
+  const [addingToCart, setAddingToCart] = useState(false);
+  const [cartMessage, setCartMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   // Auto-select first available variant
   useEffect(() => {
@@ -79,6 +84,29 @@ export default function LaptopVariantsClient({ laptopId, token }: LaptopVariants
     ? isVariantAvailable(selectedVariant.stockStatus, selectedVariant.availableQuantity, selectedVariant.isActive)
     : false;
 
+  const handleAddToCart = async () => {
+    if (!selectedVariant) return;
+
+    setAddingToCart(true);
+    setCartMessage(null);
+
+    const result = await addItem({
+      productType: 'LaptopVariant',
+      productId: selectedVariant.id,
+      quantity: 1
+    });
+
+    setAddingToCart(false);
+
+    if (result.success) {
+      setCartMessage({ type: 'success', text: result.message });
+      // Clear message after 3 seconds
+      setTimeout(() => setCartMessage(null), 3000);
+    } else {
+      setCartMessage({ type: 'error', text: result.message });
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Variant Selector */}
@@ -117,12 +145,35 @@ export default function LaptopVariantsClient({ laptopId, token }: LaptopVariants
               size="lg"
               fullWidth
               disabled={!available}
+              loading={addingToCart}
+              onClick={handleAddToCart}
               className="font-semibold"
             >
-              {available ? 'Add to Cart' : 'Out of Stock'}
+              {available ? (addingToCart ? 'Adding...' : 'Add to Cart') : 'Out of Stock'}
             </Button>
-           
           </div>
+
+          {/* Cart Message */}
+          {cartMessage && (
+            <div className={`p-4 rounded-lg border ${
+              cartMessage.type === 'success' 
+                ? 'bg-green-50 border-green-200 text-green-800' 
+                : 'bg-red-50 border-red-200 text-red-800'
+            }`}>
+              <div className="flex items-center gap-2">
+                {cartMessage.type === 'success' ? (
+                  <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                )}
+                <span className="text-sm font-medium">{cartMessage.text}</span>
+              </div>
+            </div>
+          )}
 
           {/* Additional Info */}
           {selectedVariant.stockStatus === 'LowStock' && (

@@ -1,6 +1,6 @@
 "use server";
-import { LaptopById, PaginatedLaptopsResponse, ApiResponse, LoginRequest, RegisterRequest , LoginResponse, AuthStatusResponse, LaptopVariantsResponse  } from './types'
-import { USE_MOCK_DATA, getMockLaptops, getMockLaptopById, getMockLaptopVariants } from './mock-data/config'
+import { LaptopById, PaginatedLaptopsResponse, ApiResponse, LoginRequest, RegisterRequest , LoginResponse, AuthStatusResponse, LaptopVariantsResponse, CartData, AddToCartRequest, AddToCartResponse, UpdateCartItemRequest, RemoveCartItemResponse, ClearCartResponse  } from './types'
+import { USE_MOCK_DATA, getMockLaptops, getMockLaptopById, getMockLaptopVariants, getMockCart, addMockCartItem, updateMockCartItem, removeMockCartItem, clearMockCart } from './mock-data/config'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -374,6 +374,179 @@ export async function getLaptopVariants({
 
   return apiCall<LaptopVariantsResponse>(endpoint, {
     method: "GET",
+    headers,
+  });
+}
+
+// ==========================================
+// CART API CALLS
+// ==========================================
+
+export async function getCart(token?: string) {
+  // Return mock data if enabled
+  if (USE_MOCK_DATA) {
+    const mockData = getMockCart();
+    return Promise.resolve({
+      isSuccess: true,
+      message: "Cart fetched successfully (mock data)",
+      messageAr: "تم جلب عربة التسوق بنجاح",
+      data: mockData,
+      errors: [],
+      statusCode: 200,
+      timestamp: new Date().toISOString(),
+    } as ApiResponse<CartData>);
+  }
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return apiCall<CartData>("/api/cart", {
+    method: "GET",
+    headers,
+  });
+}
+
+export async function addToCart(request: AddToCartRequest, token?: string) {
+  // Return mock data if enabled
+  if (USE_MOCK_DATA) {
+    try {
+      const mockData = addMockCartItem(request.productType, request.productId, request.quantity);
+      return Promise.resolve({
+        isSuccess: true,
+        message: "Item added to cart successfully (mock data)",
+        messageAr: "تمت إضافة العنصر إلى عربة التسوق بنجاح",
+        data: mockData,
+        errors: [],
+        statusCode: 201,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<AddToCartResponse>);
+    } catch (error) {
+      return Promise.resolve({
+        isSuccess: false,
+        message: error instanceof Error ? error.message : "Failed to add item to cart",
+        messageAr: "فشل في إضافة العنصر إلى عربة التسوق",
+        data: null as unknown as AddToCartResponse,
+        errors: [error instanceof Error ? error.message : "Unknown error"],
+        statusCode: 400,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<AddToCartResponse>);
+    }
+  }
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return apiCall<AddToCartResponse>("/api/cart/items", {
+    method: "POST",
+    headers,
+    body: JSON.stringify(request),
+  });
+}
+
+export async function updateCartItem(itemId: number, request: UpdateCartItemRequest, token?: string) {
+  // Return mock data if enabled
+  if (USE_MOCK_DATA) {
+    try {
+      updateMockCartItem(itemId, request.quantity);
+      const mockData = getMockCart();
+      return Promise.resolve({
+        isSuccess: true,
+        message: "Cart item updated successfully (mock data)",
+        messageAr: "تم تحديث عنصر عربة التسوق بنجاح",
+        data: mockData,
+        errors: [],
+        statusCode: 200,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<CartData>);
+    } catch (error) {
+      return Promise.resolve({
+        isSuccess: false,
+        message: error instanceof Error ? error.message : "Failed to update cart item",
+        messageAr: "فشل في تحديث عنصر عربة التسوق",
+        data: null as unknown as CartData,
+        errors: [error instanceof Error ? error.message : "Unknown error"],
+        statusCode: 400,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<CartData>);
+    }
+  }
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return apiCall<CartData>(`/api/cart/items/${itemId}`, {
+    method: "PUT",
+    headers,
+    body: JSON.stringify(request),
+  });
+}
+
+export async function removeCartItem(itemId: number, token?: string) {
+  // Return mock data if enabled
+  if (USE_MOCK_DATA) {
+    try {
+      const mockData = removeMockCartItem(itemId);
+      return Promise.resolve({
+        isSuccess: true,
+        message: "Item removed from cart successfully (mock data)",
+        messageAr: "تمت إزالة العنصر من عربة التسوق بنجاح",
+        data: mockData,
+        errors: [],
+        statusCode: 200,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<RemoveCartItemResponse>);
+    } catch (error) {
+      return Promise.resolve({
+        isSuccess: false,
+        message: error instanceof Error ? error.message : "Failed to remove cart item",
+        messageAr: "فشل في إزالة العنصر من عربة التسوق",
+        data: null as unknown as RemoveCartItemResponse,
+        errors: [error instanceof Error ? error.message : "Unknown error"],
+        statusCode: 400,
+        timestamp: new Date().toISOString(),
+      } as ApiResponse<RemoveCartItemResponse>);
+    }
+  }
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return apiCall<RemoveCartItemResponse>(`/api/cart/items/${itemId}`, {
+    method: "DELETE",
+    headers,
+  });
+}
+
+export async function clearCart(token?: string) {
+  // Return mock data if enabled
+  if (USE_MOCK_DATA) {
+    const mockData = clearMockCart();
+    return Promise.resolve({
+      isSuccess: true,
+      message: "Cart cleared successfully (mock data)",
+      messageAr: "تم مسح عربة التسوق بنجاح",
+      data: mockData,
+      errors: [],
+      statusCode: 200,
+      timestamp: new Date().toISOString(),
+    } as ApiResponse<ClearCartResponse>);
+  }
+
+  const headers: Record<string, string> = {};
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return apiCall<ClearCartResponse>("/api/cart", {
+    method: "DELETE",
     headers,
   });
 }
