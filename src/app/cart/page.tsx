@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useCart } from "@/hooks/useCart";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,6 +12,7 @@ import { formatPrice } from "@/lib/utils";
 
 export default function Cart() {
   const { cart, loading, error, updateItem, removeItem, clearAllItems } = useCart();
+  const [updateError, setUpdateError] = useState<string | null>(null);
 
   if (loading) {
     return <LoadingSpinner message="Loading your cart..." fullScreen />;
@@ -51,15 +53,25 @@ export default function Cart() {
 
   const handleQuantityChange = async (itemId: number, newQuantity: number) => {
     if (newQuantity < 1) return;
-    await updateItem(itemId, newQuantity);
+    
+    setUpdateError(null);
+    const result = await updateItem(itemId, newQuantity);
+    
+    if (!result.success) {
+      setUpdateError(result.message);
+      // Show error for 3 seconds then clear
+      setTimeout(() => setUpdateError(null), 3000);
+    }
   };
 
   const handleRemoveItem = async (itemId: number) => {
+    setUpdateError(null);
     await removeItem(itemId);
   };
 
   const handleClearCart = async () => {
     if (confirm("Are you sure you want to clear your cart?")) {
+      setUpdateError(null);
       await clearAllItems();
     }
   };
@@ -83,6 +95,18 @@ export default function Cart() {
             </Button>
           )}
         </div>
+
+        {/* Error Message */}
+        {updateError && (
+          <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex items-center gap-2 text-red-800">
+              <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-sm font-medium">{updateError}</span>
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
