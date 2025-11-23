@@ -205,7 +205,7 @@ Example:
 ```tsx
 <button className="
   px-4 py-2 
-  bg-gradient-to-r from-blue-600 to-indigo-600 
+  bg-linear-to-r from-blue-600 to-indigo-600 
   text-white font-medium rounded-lg
   hover:shadow-lg
   transition-all duration-200

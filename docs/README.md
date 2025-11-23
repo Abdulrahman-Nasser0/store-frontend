@@ -1,10 +1,29 @@
-# TechZone - E-Commerce Store Frontend
+# 💻 TechZone - E-Commerce Store Frontend
 
-A modern, full-featured e-commerce platform for laptops built with Next.js 16, React 19, TypeScript, and Tailwind CSS 4.
+<div align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-16.0-black?style=for-the-badge&logo=next.js)
+![React](https://img.shields.io/badge/React-19.2-61DAFB?style=for-the-badge&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-06B6D4?style=for-the-badge&logo=tailwind-css)
+
+**🚀 A modern, full-featured e-commerce platform for laptops**
+
+**🌐 [Live Demo](https://techzone-alpha.vercel.app/)** | [Features](#-features) • [Screenshots](#-screenshots) • [Getting Started](#-getting-started) • [Documentation](#-table-of-contents)
+
+</div>
+
+---
+### Homepage & Product Listing
+<div align="center">
+  <img src="../public/screenshots/Screenshot from 2025-11-23 16-07-40.png" alt="Homepage" width="800"/>
+  <p><em>Modern homepage with gradient design and featured products</em></p>
+</div>
 
 ## 📋 Table of Contents
 
 - [Overview](#overview)
+- [Screenshots](#-screenshots)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -35,6 +54,42 @@ TechZone is a modern e-commerce storefront specifically designed for selling lap
 - **Responsive Design** optimized for mobile, tablet, and desktop
 - **Type-Safe** with comprehensive TypeScript types
 - **Modern UI** with Tailwind CSS 4 and custom gradient designs
+
+---
+
+## 📸 Screenshots
+
+
+
+### Product Browsing
+<div align="center">
+  <img src="../public/screenshots/Screenshot from 2025-11-23 16-07-52.png" alt="Product Listing" width="800"/>
+  <p><em>Product listing page with grid layout and filters</em></p>
+</div>
+
+### Product Details & Variants
+<div align="center">
+  <img src="../public/screenshots/Screenshot from 2025-11-23 16-08-08.png" alt="Product Details" width="800"/>
+  <p><em>Product detail page with image gallery and variant selection</em></p>
+</div>
+
+### Variant Selection
+<div align="center">
+  <img src="../public/screenshots/Screenshot from 2025-11-23 16-08-28.png" alt="Variant Selection" width="800"/>
+  <p><em>Interactive variant selector with pricing and stock information</em></p>
+</div>
+
+### Shopping Cart
+<div align="center">
+  <img src="../public/screenshots/Screenshot from 2025-11-23 16-08-41.png" alt="Shopping Cart" width="800"/>
+  <p><em>Fully responsive shopping cart with quantity controls</em></p>
+</div>
+
+### Cart Details
+<div align="center">
+  <img src="../public/screenshots/Screenshot from 2025-11-23 16-08-59.png" alt="Cart Summary" width="800"/>
+  <p><em>Order summary with detailed pricing breakdown</em></p>
+</div>
 
 ---
 
@@ -716,7 +771,7 @@ Follows Tailwind's default spacing scale (0.25rem increments).
 
 #### Gradient Background
 ```tsx
-className="bg-gradient-to-r from-blue-600 to-indigo-600"
+className="bg-linear-to-r from-blue-600 to-indigo-600"
 ```
 
 #### Glass Morphism
